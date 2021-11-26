@@ -1,0 +1,10 @@
+.profile {
+  max-width: 1280px;
+  width: 100%;
+  height: 120px;
+  padding: 0 200px 0 200px;
+  box-sizing: border-box;
+  margin: 0 auto 0 auto;
+  display: flex;
+  margin-bottom: 51px;
+}
