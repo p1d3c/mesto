@@ -14,4 +14,9 @@
   margin: 48px 36px 37px 36px;
   cursor: pointer;
   box-sizing: border-box;
+  transition: opacity .2s ease;
+}
+
+.modal__submit:hover {
+  opacity: .8;
 }

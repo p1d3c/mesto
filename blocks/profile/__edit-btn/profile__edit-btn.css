@@ -4,4 +4,9 @@
   padding-left: 18px;
   padding-top: 15px;
   cursor: pointer;
+  transition: opacity .2s ease;
+}
+
+.profile__edit-btn:hover {
+  opacity: .6;
 }

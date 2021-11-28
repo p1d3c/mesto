@@ -1,10 +1,15 @@
 .modal__close-btn {
-  background-image: url(/images/modal_close-btn.svg);
+  background-image: url(../../../images/modal_close-btn.svg);
   background-repeat: no-repeat;
   width: 32px;
   height: 32px;
   position: relative;
   top: -360px;
   left: 438px;
+  transition: opacity .2s ease;
   cursor: pointer;
+}
+
+.modal__close-btn:hover {
+  opacity: .6;
 }
