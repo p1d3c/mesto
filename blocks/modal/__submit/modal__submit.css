@@ -1,0 +1,17 @@
+.modal__submit {
+  border: 0;
+  border-radius: 2px;
+  background-color: black;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 18px;
+  line-height: 21.78px;
+  max-width: 358px;
+  width: 100%;
+  min-height: 50px;
+  padding: 0;
+  color: white;
+  margin: 48px 36px 37px 36px;
+  cursor: pointer;
+  box-sizing: border-box;
+}
