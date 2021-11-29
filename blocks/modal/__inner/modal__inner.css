@@ -9,3 +9,9 @@
   border-radius: 10px;
   z-index: 2;
 }
+
+@media screen and (max-width:320px) {
+  .modal__inner {
+    max-width: 282px;
+  }
+}
