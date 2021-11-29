@@ -7,3 +7,18 @@
   line-height: 21.78px;
   padding-bottom: 25px;
 }
+
+@media screen and (max-width:940px) {
+  .profile__subtitle {
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width:678px) {
+  .profile__subtitle {
+    margin-bottom: 36px;
+    padding-bottom: 0;
+    box-sizing: border-box;
+    text-align: center;
+  }
+}
