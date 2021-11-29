@@ -36,7 +36,7 @@ heart.forEach((element) => {
 
 // Сохранение изменений
 
-let formElement = document.querySelector(".modal__submit");
+let formElement = document.querySelector(".modal__form");
 let nameInput = document.querySelector(".modal__name");
 let jobInput = document.querySelector(".modal__description");
 
