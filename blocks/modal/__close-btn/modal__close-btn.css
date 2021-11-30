@@ -4,7 +4,7 @@
   width: 32px;
   height: 32px;
   position: relative;
-  top: -360px;
+  top: -368px;
   left: 438px;
   transition: opacity .2s ease;
   cursor: pointer;
@@ -12,4 +12,14 @@
 
 .modal__close-btn:hover {
   opacity: .6;
+}
+
+@media screen and (max-width:640px) {
+  .modal__close-btn {
+    background-image: url(../../../images/modal__close-btn_320px.svg);
+    width: 20px;
+    height: 20px;
+    top: -366px;
+    left: 263px;
+  }
 }

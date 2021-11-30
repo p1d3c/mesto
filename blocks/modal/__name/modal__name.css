@@ -21,3 +21,11 @@
   line-height: 16.94px;
   color: black;
 }
+
+@media screen and (max-width:640px) {
+  .modal__name {
+    max-width: 238px;
+    margin-left: 22px;
+    margin-right: 22px;
+  }
+}

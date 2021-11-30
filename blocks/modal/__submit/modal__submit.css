@@ -8,7 +8,7 @@
   line-height: 21.78px;
   max-width: 358px;
   width: 100%;
-  min-height: 50px;
+  height: 50px;
   padding: 0;
   color: white;
   margin: 48px 36px 37px 36px;
@@ -19,4 +19,12 @@
 
 .modal__submit:hover {
   opacity: .8;
+}
+
+@media screen and (max-width:640px) {
+  .modal__submit {
+    max-width: 238px;
+    height: 46px;
+    margin: 45px 22px 25px 22px;
+  }
 }
