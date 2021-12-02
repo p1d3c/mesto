@@ -4,7 +4,7 @@
   flex-wrap: nowrap;
 }
 
-@media screen and (max-width:678px) {
+@media screen and (max-width:768px) {
   .profile__row {
     justify-content: center;
     margin: 0 auto 0 auto;

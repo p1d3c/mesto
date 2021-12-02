@@ -4,12 +4,12 @@ const closeBtn = document.querySelector(".modal__close-btn");
 const modalOverlay = document.querySelector(".modal__overlay");
 let profName = document.querySelector(".profile__title");
 let profJob = document.querySelector(".profile__subtitle");
-let modalName = document.querySelector(".modal__name");
-let modalDesc = document.querySelector(".modal__description");
+let modalName = document.querySelector(".modal__input_type_name");
+let modalDesc = document.querySelector(".modal__input_type_job");
 
 let formElement = document.querySelector(".modal__form");
-let nameInput = document.querySelector(".modal__name");
-let jobInput = document.querySelector(".modal__description");
+let nameInput = document.querySelector(".modal__input_type_name");
+let jobInput = document.querySelector(".modal__input_type_job");
 
 function closeModal() {
   modal.classList.remove("modal_active");
