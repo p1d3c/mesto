@@ -1,0 +1,12 @@
+.element__button {
+  background-image: url(../../../images/trashcan.svg);
+  position: relative;
+  top: 42px;
+  left: 245px;
+  width: 18px;
+  height: 19px;
+  cursor: pointer;
+  background-color: transparent;
+  border: 0;
+  padding: 0;
+}

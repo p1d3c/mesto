@@ -23,6 +23,7 @@
 
 @import url(../blocks/element/element.css);
 @import url(../blocks/element/__image/element__image.css);
+@import url(../blocks/element/__button/element__button.css);
 @import url(../blocks/element/__text/element__text.css);
 @import url(../blocks/element/__title/element__title.css);
 @import url(../blocks/element/__heart/element__heart.css);
@@ -39,3 +40,12 @@
 @import url(../blocks/modal/__close-btn/modal__close-btn.css);
 @import url(../blocks/modal/_active/modal_active.css);
 @import url(../blocks/modal/__overlay/modal__overlay.css);
+
+@import url(../blocks/new-mesto/new-mesto.css);
+@import url(../blocks/new-mesto/__overlay/new-mesto__overlay.css);
+@import url(../blocks/new-mesto/__inner/new-mesto__inner.css);
+@import url(../blocks/new-mesto/__title/new-mesto__title.css);
+@import url(../blocks/new-mesto/__input/new-mesto__input.css);
+@import url(../blocks/new-mesto/__submit/new-mesto__submit.css);
+@import url(../blocks/new-mesto/__close-btn/new-mesto__close-btn.css);
+@import url(../blocks/new-mesto/_active/new-mesto_active.css);

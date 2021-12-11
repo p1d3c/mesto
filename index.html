@@ -24,52 +24,20 @@
         </div>
         <p class="profile__subtitle">Исследователь океана</p>
       </div>
-      <button class="profile__add-btn" type="button"></button>
+      <button class="profile__add-btn" type="button" name="add"></button>
     </section>
 
     <section class="elements">
-      <div class="element">
-        <img src="./images/element-image_karachaevsk.jpg" alt="замок" class="element__image">
-        <div class="element__text">
-          <h2 class="element__title">Карачаевск</h2>
-          <button class="element__heart" type="button"></button>
+      <template id="temp">
+        <div class="element">
+          <button type="button" class="element__button"></button>
+          <img src="" alt="" class="element__image">
+          <div class="element__text">
+            <h2 class="element__title"></h2>
+            <button class="element__heart" type="button" name="heart"></button>
+          </div>
         </div>
-      </div>
-      <div class="element">
-        <img src="./images/element-image_skateboard.jpg" alt="замок" class="element__image">
-        <div class="element__text">
-          <h2 class="element__title">В скейтпарке</h2>
-          <button class="element__heart" type="button"></button>
-        </div>
-      </div>
-      <div class="element">
-        <img src="./images/element-image_dombay.jpg" alt="замок" class="element__image">
-        <div class="element__text">
-          <h2 class="element__title">Домбай</h2>
-          <button class="element__heart" type="button"></button>
-        </div>
-      </div>
-      <div class="element">
-        <img src="./images/element-image_gora-elbrus.jpg" alt="замок" class="element__image">
-        <div class="element__text">
-          <h2 class="element__title">Гора Эльбрус</h2>
-          <button class="element__heart" type="button"></button>
-        </div>
-      </div>
-      <div class="element">
-        <img src="./images/element-image_ring.jpg" alt="замок" class="element__image">
-        <div class="element__text">
-          <h2 class="element__title">Обручальное кольцо</h2>
-          <button class="element__heart" type="button"></button>
-        </div>
-      </div>
-      <div class="element">
-        <img src="./images/element-image_smile.jpg" alt="замок" class="element__image">
-        <div class="element__text">
-          <h2 class="element__title">Улыбнись</h2>
-          <button class="element__heart" type="button"></button>
-        </div>
-      </div>
+      </template>
     </section>
   </main>
 
@@ -80,9 +48,22 @@
       <form class="modal__form" name="modal-form">
         <input type="text" class="modal__input modal__input_type_name" name="prof-name">
         <input type="text" class="modal__input modal__input_type_job" name="prof-desc">
-        <button type="submit" class="modal__submit">Сохранить</button>
+        <button type="submit" class="modal__submit" name="modal-submit">Сохранить</button>
       </form>
-      <button class="modal__close-btn" type="button"></button>
+      <button class="modal__close-btn" type="button" name="modal-close"></button>
+    </div>
+  </section>
+
+  <section class="new-mesto">
+    <div class="new-mesto__overlay"></div>
+    <div class="new-mesto__inner">
+      <h2 class="new-mesto__title">Новое место</h2>
+      <form class="new-mesto__form" name="new-mesto-form">
+        <input type="text" class="new-mesto__input new-mesto__input_type_name" name="prof-name" placeholder="Название">
+        <input type="text" class="new-mesto__input new-mesto__input_type_image" name="prof-image" placeholder="Ссылка на картинку">
+        <button type="submit" class="new-mesto__submit" name="mesto-submit">Создать</button>
+      </form>
+      <button class="new-mesto__close-btn" type="button" name="mesto-close"></button>
     </div>
   </section>
 
