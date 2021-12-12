@@ -3,12 +3,15 @@ const addBtn = document.querySelector('.profile__add-btn');
 
 const modal = document.querySelector('.modal');
 const mesto = document.querySelector('.new-mesto');
+const imgPopup = document.querySelector('.image-popup');
 
 const modalCloseBtn = document.querySelector('.modal__close-btn');
 const mestoCloseBtn = document.querySelector('.new-mesto__close-btn');
+const imgCloseBtn = document.querySelector('.image-popup__close-btn');
 
 const modalOverlay = document.querySelector('.modal__overlay');
 const mestoOverlay = document.querySelector('.new-mesto__overlay');
+const imgOverlay = document.querySelector('.image-popup__overlay');
 
 let profName = document.querySelector('.profile__title');
 let profJob = document.querySelector('.profile__subtitle');
@@ -57,6 +60,18 @@ window.onload = () => {
 
     element.querySelector('.element__image').src = el.link;
     element.querySelector('.element__title').textContent = el.name;
+
+    element.querySelector('.element__heart').addEventListener('click', (evt) => {
+      evt.target.classList.toggle('element__heart_active');
+    })
+
+    element.querySelector('.element__button').addEventListener('click', (evt) => {
+      console.log(evt.target);
+      evt.target.parentElement.remove();
+    } )
+
+    element.querySelector('.element__image').addEventListener('click', openModal);
+
     document.querySelector('.elements').append(element);
   })
 }
@@ -66,6 +81,8 @@ function closeModal(evt) {
     modal.classList.remove('modal_active');
   } else if (evt.target.classList.value === 'new-mesto__close-btn' || evt.target.classList.value === 'new-mesto__form' || evt.target.classList.value === 'new-mesto__overlay') {
     mesto.classList.remove('new-mesto_active');
+  } else if (evt.target.classList.value === 'image-popup__close-btn' || evt.target.classList.value === 'image-popup__overlay') {
+    imgPopup.classList.remove('image-popup_active');
   }
 }
 
@@ -74,10 +91,17 @@ function openModal(evt) {
     modal.classList.add('modal_active');
     modalName.value = profName.textContent;
     modalDesc.value = profJob.textContent;
-  } else {
+  } else if (evt.target.name === 'add') {
     mesto.classList.add('new-mesto_active');
     titleInput.value = '';
     linkInput.value = '';
+  } else {
+    imgPopup.classList.add('image-popup_active');
+    let img = document.querySelector('.image-popup__image');
+    let text = document.querySelector('.image-popup__title');
+    console.log(1);
+    img.src = evt.target.src;
+    text.textContent = 2;
   }
 }
 
@@ -107,13 +131,12 @@ function addElement (evt) {
       evt.target.classList.toggle('element__heart_active');
     })
 
-    closeModal(evt);
-  }
-}
+    element.querySelector('.element__button').addEventListener('click', (evt) => {
+      console.log(evt.target);
+      evt.target.parentElement.remove();
+    } )
 
-function like (evt) {
-  if (evt.target.name === 'heart') {
-    evt.target.classList.toggle('element__heart_active');
+    closeModal(evt);
   }
 }
 
@@ -126,14 +149,8 @@ modalOverlay.addEventListener('click', closeModal);
 mestoCloseBtn.addEventListener('click', closeModal);
 mestoOverlay.addEventListener('click', closeModal);
 
+imgCloseBtn.addEventListener('click', closeModal);
+imgOverlay.addEventListener('click', closeModal);
+
 modalFormElement.addEventListener('submit', formSubmitHandler);
 mestoFormElement.addEventListener('submit', addElement);
-
-// const hearts = Array.from(document.querySelectorAll('.element__heart'));
-// console.log(hearts);
-
-// hearts.forEach((el) => {
-//   el.addEventListener('click', () => {
-//     el.classList.toggle('element__heart_active');
-//   });
-// });
