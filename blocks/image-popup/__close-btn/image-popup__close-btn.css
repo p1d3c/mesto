@@ -3,11 +3,9 @@
   background-repeat: no-repeat;
   width: 32px;
   height: 32px;
-  position: relative;
-  /* top: -618px;
-  left: 422px; */
-  top: -42.5vh;
-  left: 1vh;
+  position: absolute;
+  top: -40px;
+  right: -40px;
   transition: opacity .2s ease;
   cursor: pointer;
   background-color: transparent;
@@ -24,7 +22,7 @@
     background-image: url(../../../images/modal__close-btn_320px.svg);
     width: 20px;
     height: 20px;
-    top: -366px;
-    left: 263px;
+    top: -36px;
+    right: 0;
   }
 }

@@ -95,13 +95,12 @@ function openModal(evt) {
     mesto.classList.add('new-mesto_active');
     titleInput.value = '';
     linkInput.value = '';
-  } else {
+  } else if (evt.target.classList.value === 'element__image') {
     imgPopup.classList.add('image-popup_active');
     let img = document.querySelector('.image-popup__image');
     let text = document.querySelector('.image-popup__title');
-    console.log(1);
     img.src = evt.target.src;
-    text.textContent = 2;
+    text.textContent = evt.target.parentElement.querySelector('.element__title').textContent;
   }
 }
 
@@ -134,7 +133,9 @@ function addElement (evt) {
     element.querySelector('.element__button').addEventListener('click', (evt) => {
       console.log(evt.target);
       evt.target.parentElement.remove();
-    } )
+    })
+
+    element.querySelector('.element__image').addEventListener('click', openModal);
 
     closeModal(evt);
   }

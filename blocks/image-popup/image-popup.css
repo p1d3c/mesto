@@ -4,8 +4,10 @@
   bottom: 0;
   left: 0;
   right: 0;
-  display: none;
   justify-content: center;
   align-items: center;
   background: rgba(0, 0, 0, .9);
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0.25s, opacity .25s;
 }
