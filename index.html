@@ -41,38 +41,38 @@
     </section>
   </main>
 
-  <section class="modal">
-    <div class="modal__overlay"></div>
-    <div class="modal__inner">
-      <h2 class="modal__title">Редактировать профиль</h2>
-      <form class="modal__form" name="modal-form">
-        <input type="text" class="modal__input modal__input_type_name" name="prof-name">
-        <input type="text" class="modal__input modal__input_type_job" name="prof-desc">
-        <button type="submit" class="modal__submit" name="modal-submit">Сохранить</button>
+  <section class="popup popup_type_edit">
+    <div class="popup__overlay"></div>
+    <div class="popup__inner">
+      <h2 class="popup__title">Редактировать профиль</h2>
+      <form class="popup__form popup__form_type_edit" name="edit-form">
+        <input type="text" class="popup__input popup__input_type_name" name="prof-name">
+        <input type="text" class="popup__input popup__input_type_job" name="prof-desc">
+        <button type="submit" class="popup__submit" name="edit-submit">Сохранить</button>
       </form>
-      <button class="modal__close-btn" type="button" name="modal-close"></button>
+      <button class="popup__close-btn" type="button" name="edit-close"></button>
     </div>
   </section>
 
-  <section class="new-mesto">
-    <div class="new-mesto__overlay"></div>
-    <div class="new-mesto__inner">
-      <h2 class="new-mesto__title">Новое место</h2>
-      <form class="new-mesto__form" name="new-mesto-form">
-        <input type="text" class="new-mesto__input new-mesto__input_type_name" name="prof-name" placeholder="Название">
-        <input type="text" class="new-mesto__input new-mesto__input_type_image" name="prof-image" placeholder="Ссылка на картинку">
-        <button type="submit" class="new-mesto__submit" name="mesto-submit">Создать</button>
+  <section class="popup popup_type_add">
+    <div class="popup__overlay"></div>
+    <div class="popup__inner">
+      <h2 class="popup__title">Новое место</h2>
+      <form class="popup__form popup__form_type_add" name="add-form">
+        <input type="text" class="popup__input popup__input_type_title" name="add-name" placeholder="Название">
+        <input type="text" class="popup__input popup__input_type_image" name="add-image" placeholder="Ссылка на картинку">
+        <button type="submit" class="popup__submit" name="add-submit">Создать</button>
       </form>
-      <button class="new-mesto__close-btn" type="button" name="mesto-close"></button>
+      <button class="popup__close-btn" type="button" name="add-close"></button>
     </div>
   </section>
 
-  <section class="image-popup">
-    <div class="image-popup__overlay"></div>
-    <div class="image-popup__content">
-      <img class="image-popup__image" src="#" alt="#">
-      <button class="image-popup__close-btn" type="button" name="img-close"></button>
-      <h2 class="image-popup__title"></h2>
+  <section class="popup popup_type_img">
+    <div class="popup__overlay"></div>
+    <div class="popup__content">
+      <img class="popup__image" src="#" alt="#">
+      <button class="popup__close-btn" type="button" name="img-close"></button>
+      <h2 class="popup__caption"></h2>
     </div>
   </section>
 
