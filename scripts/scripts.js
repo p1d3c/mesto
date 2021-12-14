@@ -130,8 +130,12 @@ function addNewCard(evt) {
     name: titleInput.value,
     link: linkInput.value
   };
-  pasteNewCard(newCard);
-  closePopup(addCardPopup);
+  if (newCard.name === '' || newCard.link === '') {
+    closePopup(addCardPopup);
+  } else {
+    pasteNewCard(newCard);
+    closePopup(addCardPopup);
+  }
 }
 
 function renderCards() {
