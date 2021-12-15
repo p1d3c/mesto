@@ -79,8 +79,6 @@ function fillProfilePopup() {
 }
 
 function fillAddCardPopup() {
-  titleInput.value = '';
-  linkInput.value = '';
   openPopup(addCardPopup);
 }
 
@@ -106,6 +104,7 @@ function createCard(el) {
   const likeBtn = elementCard.querySelector('.element__heart');
   const delBtn = elementCard.querySelector('.element__button');
   img.src = el.link;
+  img.alt = el.name;
   title.textContent = el.name;
 
   delBtn.addEventListener('click', () => delCard(elementCard))
@@ -135,6 +134,8 @@ function addNewCard(evt) {
   } else {
     pasteNewCard(newCard);
     closePopup(addCardPopup);
+    titleInput.value = '';
+    linkInput.value = '';
   }
 }
 
