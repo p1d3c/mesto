@@ -3,9 +3,9 @@
   background-repeat: no-repeat;
   width: 32px;
   height: 32px;
-  position: relative;
-  top: -368px;
-  left: 438px;
+  position: absolute;
+  top: -40px;
+  right: -40px;
   transition: opacity .2s ease;
   cursor: pointer;
   background-color: transparent;
@@ -37,8 +37,8 @@
     background-image: url(../../../images/modal__close-btn_320px.svg);
     width: 20px;
     height: 20px;
-    top: -366px;
-    left: 263px;
+    top: -36px;
+    right: 0;
   }
 
   .popup__content .popup__close-btn {
