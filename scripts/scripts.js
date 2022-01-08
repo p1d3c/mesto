@@ -6,6 +6,7 @@ const addCardPopup = document.querySelector('.popup_type_add');
 const imgPopup = document.querySelector('.popup_type_img');
 
 const popupCloseBtn = document.querySelectorAll('.popup__close-btn');
+const popupOverlay = document.querySelectorAll('.popup__overlay');
 
 const profName = document.querySelector('.profile__title');
 const profJob = document.querySelector('.profile__subtitle');
@@ -143,10 +144,20 @@ function renderCards() {
   initialCards.forEach((el) => pasteCard(el));
 }
 
-popupCloseBtn.forEach((btn) => {
-  const closestPopup = btn.closest('.popup');
-  btn.addEventListener('click', () => closePopup(closestPopup));
-});
+document.addEventListener('click', (evt) => {
+  const closestPopup = evt.target.closest('.popup');
+  if (evt.target.classList.contains('popup__overlay')
+  || evt.target.classList.contains('popup__close-btn')) {
+    closePopup(closestPopup);
+  }
+})
+
+document.addEventListener('keydown', (evt) => {
+  const openedPopup = document.querySelector('.popup_opened');
+  if (evt.key === 'Escape') {
+    closePopup(openedPopup);
+  }
+})
 
 editBtn.addEventListener('click', fillProfilePopup);
 addBtn.addEventListener('click', fillAddCardPopup);
