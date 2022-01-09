@@ -125,6 +125,14 @@ function pasteCard(el, method) {
   }
 }
 
+function disableButton(selectorsConfig) {
+  const buttonElements = document.querySelectorAll(selectorsConfig.submitButtonSelector);
+  buttonElements.forEach((btn) => {
+    btn.classList.add(selectorsConfig.inactiveButtonClass);
+    btn.setAttribute('disabled', true);
+  })
+}
+
 function addNewCard(evt) {
   evt.preventDefault();
   const newCard = {
@@ -134,6 +142,7 @@ function addNewCard(evt) {
     pasteCard(newCard, 'end');
     closePopup(addCardPopup);
     addFormElement.reset();
+    disableButton(selectorsConfig);
 }
 
 function renderCards() {
