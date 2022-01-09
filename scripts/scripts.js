@@ -18,6 +18,7 @@ const nameInput = document.querySelector('.popup__input_type_name');
 const jobInput = document.querySelector('.popup__input_type_job');
 
 const addFormElement = document.querySelector('.popup__form_type_add');
+const addSubmitBtn = document.querySelector('button[name="add-submit"]');
 const titleInput = document.querySelector('.popup__input_type_title');
 const linkInput = document.querySelector('.popup__input_type_image');
 
@@ -57,11 +58,15 @@ const initialCards = [
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
 
+  document.removeEventListener('click', closeViaBtnOrOverlay);
+
   document.removeEventListener('keydown', closeViaEsc);
 }
 
 function openPopup(popup) {
   popup.classList.add('popup_opened');
+
+  document.addEventListener('click', closeViaBtnOrOverlay);
 
   document.addEventListener('keydown', closeViaEsc);
 }
@@ -125,14 +130,6 @@ function pasteCard(el, method) {
   }
 }
 
-function disableButton(selectorsConfig) {
-  const buttonElements = document.querySelectorAll(selectorsConfig.submitButtonSelector);
-  buttonElements.forEach((btn) => {
-    btn.classList.add(selectorsConfig.inactiveButtonClass);
-    btn.setAttribute('disabled', true);
-  })
-}
-
 function addNewCard(evt) {
   evt.preventDefault();
   const newCard = {
@@ -142,7 +139,7 @@ function addNewCard(evt) {
     pasteCard(newCard, 'end');
     closePopup(addCardPopup);
     addFormElement.reset();
-    disableButton(selectorsConfig);
+    disableButton(addSubmitBtn, selectorsConfig);
 }
 
 function renderCards() {
@@ -156,13 +153,13 @@ function closeViaEsc(evt) {
   }
 }
 
-document.addEventListener('click', (evt) => {
+function closeViaBtnOrOverlay(evt) {
   if (evt.target.classList.contains('popup__overlay')
   || evt.target.classList.contains('popup__close-btn')) {
     const closestPopup = evt.target.closest('.popup');
     closePopup(closestPopup);
   }
-})
+}
 
 window.onload = renderCards();
 
