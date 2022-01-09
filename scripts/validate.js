@@ -1,3 +1,13 @@
+const selectorsConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  fieldSelector: '.popup__form-set',
+  submitButtonSelector: '.popup__submit',
+  inactiveButtonClass: 'popup__submit_inactive',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__input-error_active'
+};
+
 const showInputError = (formElement, inputElement, errorMessage, selectorsConfig) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
   inputElement.classList.add(selectorsConfig.inputErrorClass);
@@ -32,21 +42,6 @@ const setEventListeners = (formElement, selectorsConfig) => {
   });
 };
 
-const enableValidation = (selectorsConfig) => {
-  const formList = Array.from(document.querySelectorAll(selectorsConfig.formSelector));
-  formList.forEach((formElement) => {
-    formElement.addEventListener('submit', function (evt) {
-      evt.preventDefault();
-    });
-
-    const fieldsetList = Array.from(formElement.querySelectorAll(selectorsConfig.fieldSelector));
-
-    fieldsetList.forEach((fieldSet) => {
-      setEventListeners(fieldSet, selectorsConfig);
-    });
-  });
-};
-
 const hasInvalidInput = (inputList) => {
   return inputList.some((inputElement) => {
     return !inputElement.validity.valid;
@@ -63,12 +58,19 @@ const toggleButtonState = (inputList, buttonElement, inactiveButtonClass) => {
   }
 }
 
-enableValidation({
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  fieldSelector: '.popup__form-set',
-  submitButtonSelector: '.popup__submit',
-  inactiveButtonClass: 'popup__submit_inactive',
-  inputErrorClass: 'popup__input_type_error',
-  errorClass: 'popup__input-error_active'
-});
+const enableValidation = (selectorsConfig) => {
+  const formList = Array.from(document.querySelectorAll(selectorsConfig.formSelector));
+  formList.forEach((formElement) => {
+    formElement.addEventListener('submit', function (evt) {
+      evt.preventDefault();
+    });
+
+    const fieldsetList = Array.from(formElement.querySelectorAll(selectorsConfig.fieldSelector));
+
+    fieldsetList.forEach((fieldSet) => {
+      setEventListeners(fieldSet, selectorsConfig);
+    });
+  });
+};
+
+enableValidation(selectorsConfig);

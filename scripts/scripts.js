@@ -54,14 +54,16 @@ const initialCards = [
   }
 ];
 
-window.onload = renderCards();
-
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
+
+  document.removeEventListener('keydown', closeViaEsc);
 }
 
 function openPopup(popup) {
   popup.classList.add('popup_opened');
+
+  document.addEventListener('keydown', closeViaEsc);
 }
 
 function submitFormHandler (evt) {
@@ -114,14 +116,13 @@ function createCard(el) {
   return elementCard;
 }
 
-function pasteCard(el) {
+function pasteCard(el, method) {
   const elementCard = createCard(el);
-  cardList.append(elementCard);
-}
-
-function pasteNewCard(el) {
-  const elementCard = createCard(el);
-  cardList.prepend(elementCard);
+  if (method === 'end') {
+    cardList.prepend(elementCard);
+  } else {
+    cardList.append(elementCard);
+  }
 }
 
 function addNewCard(evt) {
@@ -130,34 +131,31 @@ function addNewCard(evt) {
     name: titleInput.value,
     link: linkInput.value
   };
-  if (newCard.name === '' || newCard.link === '') {
+    pasteCard(newCard, 'end');
     closePopup(addCardPopup);
-  } else {
-    pasteNewCard(newCard);
-    closePopup(addCardPopup);
-    titleInput.value = '';
-    linkInput.value = '';
-  }
+    addFormElement.reset();
 }
 
 function renderCards() {
-  initialCards.forEach((el) => pasteCard(el));
+  initialCards.forEach((el) => pasteCard(el, 'start'));
+}
+
+function closeViaEsc(evt) {
+  if (evt.key === 'Escape') {
+    const openedPopup = document.querySelector('.popup_opened');
+    closePopup(openedPopup);
+  }
 }
 
 document.addEventListener('click', (evt) => {
-  const closestPopup = evt.target.closest('.popup');
   if (evt.target.classList.contains('popup__overlay')
   || evt.target.classList.contains('popup__close-btn')) {
+    const closestPopup = evt.target.closest('.popup');
     closePopup(closestPopup);
   }
 })
 
-document.addEventListener('keydown', (evt) => {
-  const openedPopup = document.querySelector('.popup_opened');
-  if (evt.key === 'Escape') {
-    closePopup(openedPopup);
-  }
-})
+window.onload = renderCards();
 
 editBtn.addEventListener('click', fillProfilePopup);
 addBtn.addEventListener('click', fillAddCardPopup);

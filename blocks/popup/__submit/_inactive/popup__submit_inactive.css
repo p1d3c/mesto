@@ -2,7 +2,10 @@
   color: black;
   background-color: white;
   border: 1px solid #000000;
-  opacity: .2;
   cursor: default;
   transition: none;
+}
+
+.popup__submit_inactive:hover {
+  opacity: 1;
 }
