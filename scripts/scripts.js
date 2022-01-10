@@ -5,9 +5,6 @@ const profilePopup = document.querySelector('.popup_type_edit');
 const addCardPopup = document.querySelector('.popup_type_add');
 const imgPopup = document.querySelector('.popup_type_img');
 
-const popupCloseBtn = document.querySelectorAll('.popup__close-btn');
-const popupOverlay = document.querySelectorAll('.popup__overlay');
-
 const profName = document.querySelector('.profile__title');
 const profJob = document.querySelector('.profile__subtitle');
 const profilePopupName = document.querySelector('.popup__input_type_name');
