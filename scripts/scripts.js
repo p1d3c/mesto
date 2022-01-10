@@ -14,6 +14,7 @@ const profilePopupName = document.querySelector('.popup__input_type_name');
 const profilePopupJob = document.querySelector('.popup__input_type_job');
 
 const editFormElement = document.querySelector('.popup__form_type_edit');
+const editSubmitBtn = document.querySelector('button[name="edit-submit"]');
 const nameInput = document.querySelector('.popup__input_type_name');
 const jobInput = document.querySelector('.popup__input_type_job');
 
@@ -84,6 +85,7 @@ function fillProfilePopup() {
   profilePopupName.value = profName.textContent;
   profilePopupJob.value = profJob.textContent;
   openPopup(profilePopup);
+  activateButton(editSubmitBtn, selectorsConfig.inactiveButtonClass);
 }
 
 function fillAddCardPopup() {
@@ -139,7 +141,7 @@ function addNewCard(evt) {
     pasteCard(newCard, 'end');
     closePopup(addCardPopup);
     addFormElement.reset();
-    disableButton(addSubmitBtn, selectorsConfig);
+    disableButton(addSubmitBtn, selectorsConfig.inactiveButtonClass);
 }
 
 function renderCards() {
