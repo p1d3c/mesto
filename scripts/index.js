@@ -1,3 +1,7 @@
+export { fillImgPopup }
+import { Card } from './Card.js'
+import { selectorsConfig } from './selectorsConfig.js'
+
 const editBtn = document.querySelector('.profile__edit-btn');
 const addBtn = document.querySelector('.profile__add-btn');
 
@@ -20,7 +24,7 @@ const addSubmitBtn = document.querySelector('button[name="add-submit"]');
 const titleInput = document.querySelector('.popup__input_type_title');
 const linkInput = document.querySelector('.popup__input_type_image');
 
-const template = document.querySelector('#temp').content;
+// const template = document.querySelector('#temp').content;
 const cardList = document.querySelector('.elements');
 
 const showImage = imgPopup.querySelector('.popup__image');
@@ -96,32 +100,32 @@ function fillImgPopup(el) {
   openPopup(imgPopup);
 }
 
-function delCard(el) {
-  el.remove();
-}
+// function delCard(el) {
+//   el.remove();
+// }
 
-function likeCard(el) {
-  el.classList.toggle('element__heart_active');
-}
+// function likeCard(el) {
+//   el.classList.toggle('element__heart_active');
+// }
 
-function createCard(el) {
-  const elementCard = template.querySelector('.element').cloneNode(true);
-  const img = elementCard.querySelector('.element__image');
-  const title = elementCard.querySelector('.element__title');
-  const likeBtn = elementCard.querySelector('.element__heart');
-  const delBtn = elementCard.querySelector('.element__button');
-  img.src = el.link;
-  img.alt = el.name;
-  title.textContent = el.name;
+// function createCard(el) {
+//   const elementCard = template.querySelector('.element').cloneNode(true);
+//   const img = elementCard.querySelector('.element__image');
+//   const title = elementCard.querySelector('.element__title');
+//   const likeBtn = elementCard.querySelector('.element__heart');
+//   const delBtn = elementCard.querySelector('.element__button');
+//   img.src = el.link;
+//   img.alt = el.name;
+//   title.textContent = el.name;
 
-  delBtn.addEventListener('click', () => delCard(elementCard))
-  likeBtn.addEventListener('click', () => likeCard(likeBtn));
-  img.addEventListener('click', ()  => fillImgPopup(el));
-  return elementCard;
-}
+//   delBtn.addEventListener('click', () => delCard(elementCard))
+//   likeBtn.addEventListener('click', () => likeCard(likeBtn));
+//   img.addEventListener('click', ()  => fillImgPopup(el));
+//   return elementCard;
+// }
 
 function pasteCard(el, method) {
-  const elementCard = createCard(el);
+  const elementCard = new Card(el).createCard();
   if (method === 'end') {
     cardList.prepend(elementCard);
   } else {
