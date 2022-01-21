@@ -1,6 +1,7 @@
 export { fillImgPopup }
 import { Card } from './Card.js'
 import { selectorsConfig } from './selectorsConfig.js'
+import FormValidator from './FormValidator.js';
 
 const editBtn = document.querySelector('.profile__edit-btn');
 const addBtn = document.querySelector('.profile__add-btn');
@@ -24,7 +25,6 @@ const addSubmitBtn = document.querySelector('button[name="add-submit"]');
 const titleInput = document.querySelector('.popup__input_type_title');
 const linkInput = document.querySelector('.popup__input_type_image');
 
-// const template = document.querySelector('#temp').content;
 const cardList = document.querySelector('.elements');
 
 const showImage = imgPopup.querySelector('.popup__image');
@@ -86,7 +86,7 @@ function fillProfilePopup() {
   profilePopupName.value = profName.textContent;
   profilePopupJob.value = profJob.textContent;
   openPopup(profilePopup);
-  activateButton(editSubmitBtn, selectorsConfig.inactiveButtonClass);
+  editFormValidator.activateButton(editSubmitBtn, selectorsConfig.inactiveButtonClass);
 }
 
 function fillAddCardPopup() {
@@ -99,30 +99,6 @@ function fillImgPopup(el) {
   showCaption.textContent = el.name;
   openPopup(imgPopup);
 }
-
-// function delCard(el) {
-//   el.remove();
-// }
-
-// function likeCard(el) {
-//   el.classList.toggle('element__heart_active');
-// }
-
-// function createCard(el) {
-//   const elementCard = template.querySelector('.element').cloneNode(true);
-//   const img = elementCard.querySelector('.element__image');
-//   const title = elementCard.querySelector('.element__title');
-//   const likeBtn = elementCard.querySelector('.element__heart');
-//   const delBtn = elementCard.querySelector('.element__button');
-//   img.src = el.link;
-//   img.alt = el.name;
-//   title.textContent = el.name;
-
-//   delBtn.addEventListener('click', () => delCard(elementCard))
-//   likeBtn.addEventListener('click', () => likeCard(likeBtn));
-//   img.addEventListener('click', ()  => fillImgPopup(el));
-//   return elementCard;
-// }
 
 function pasteCard(el, method) {
   const elementCard = new Card(el).createCard();
@@ -142,7 +118,7 @@ function addNewCard(evt) {
     pasteCard(newCard, 'end');
     closePopup(addCardPopup);
     addFormElement.reset();
-    disableButton(addSubmitBtn, selectorsConfig.inactiveButtonClass);
+    editFormValidator.disableButton(addSubmitBtn, selectorsConfig.inactiveButtonClass);
 }
 
 function renderCards() {
@@ -166,8 +142,12 @@ function closeViaBtnOrOverlay(evt) {
 
 window.onload = renderCards();
 
+const editFormValidator = new FormValidator(selectorsConfig);
+editFormValidator.enableValidation();
+
 editBtn.addEventListener('click', fillProfilePopup);
 addBtn.addEventListener('click', fillAddCardPopup);
 
 editFormElement.addEventListener('submit', submitFormHandler);
 addFormElement.addEventListener('submit', addNewCard);
+
