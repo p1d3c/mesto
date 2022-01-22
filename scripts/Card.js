@@ -1,4 +1,4 @@
-import { fillImgPopup } from './index.js'
+import { fillImgPopup } from './components.js';
 
 class Card {
   constructor(data) {
@@ -36,9 +36,9 @@ class Card {
 
   _delCard() {
     this._elementCard.remove();
-    this._delBtn.removeEventListener('click', this._delCard);
-    this._likeBtn.removeEventListener('click', this._likeCard);
-    this._img.removeEventListener('click', fillImgPopup);
+    this._delBtn = null;
+    this._likeBtn = null;
+    this._img = null;
   }
 
   _likeCard() {

@@ -1,33 +1,32 @@
-import { selectorsConfig } from './selectorsConfig.js';
-
 class FormValidator {
-  constructor(selectorsConfig) {
-    this._formSelector = selectorsConfig.formSelector;
+  constructor(selectorsConfig, formSelector) {
     this._inputSelector = selectorsConfig.inputSelector;
     this._fieldSelector = selectorsConfig.fieldSelector;
     this._submitButtonSelector = selectorsConfig.submitButtonSelector;
     this._inactiveButtonClass = selectorsConfig.inactiveButtonClass;
     this._inputErrorClass = selectorsConfig.inputErrorClass;
     this._errorClass = selectorsConfig.errorClass;
+    this._form = formSelector;
+    this._formElement = null;
+    this._inputList = null;
   }
 
   enableValidation() {
-    const formList = Array.from(document.querySelectorAll(this._formSelector));
-    formList.forEach((formElement) => {
-      formElement.addEventListener('submit', function (evt) {
-        evt.preventDefault();
-      });
+    const form = document.querySelector(this._form);
+    this._formElement = form;
+    form.addEventListener('submit', (evt) => {
+      evt.preventDefault();
+    })
 
-      const fieldsetList = Array.from(formElement.querySelectorAll(this._fieldSelector));
-
-      fieldsetList.forEach((fieldSet) => {
-        this._setEventListeners(fieldSet);
-      });
+    const fieldsetList = Array.from(form.querySelectorAll(this._fieldSelector));
+    fieldsetList.forEach((fieldSet) => {
+      this._setEventListeners(fieldSet);
     });
   }
 
   _setEventListeners(formElement) {
     const inputList = Array.from(formElement.querySelectorAll(this._inputSelector));
+    this._inputList = inputList;
     const buttonElement = formElement.querySelector(this._submitButtonSelector);
     this._toggleButtonState(inputList, buttonElement);
     inputList.forEach((inputElement) => {
@@ -82,6 +81,12 @@ class FormValidator {
   activateButton(buttonElement) {
     buttonElement.classList.remove(this._inactiveButtonClass);
     buttonElement.removeAttribute('disabled', true);
+  }
+
+  hideErrorMessage() {
+    this._inputList.forEach(input => {
+      this._hideInputError(this._formElement, input);
+    })
   }
 }
 
