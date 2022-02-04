@@ -1,4 +1,5 @@
 import { fillImgPopup } from './components.js';
+import PopupWithImage from './PopupWithImage.js';
 
 class Card {
   constructor(data) {
@@ -9,11 +10,11 @@ class Card {
   }
 
   _getTemplate() {
-    const elementCard = document.
-    querySelector('#temp').
-    content.
-    querySelector('.element').
-    cloneNode(true);
+    const elementCard = document
+      .querySelector('#temp')
+      .content
+      .querySelector('.element')
+      .cloneNode(true);
 
     return elementCard;
   }
@@ -48,7 +49,7 @@ class Card {
   _setEventListeners() {
     this._delBtn.addEventListener('click', () => this._delCard());
     this._likeBtn.addEventListener('click', () => this._likeCard());
-    this._img.addEventListener('click', () => fillImgPopup(this._data));
+    this._img.addEventListener('click', () => new PopupWithImage('.popup_type_img').open(this._data));
   }
 }
 
