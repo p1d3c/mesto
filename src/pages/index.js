@@ -3,6 +3,8 @@ import { Card } from '../components/Card.js';
 import { selectorsConfig } from '../components/selectorsConfig.js';
 import FormValidator from '../components/FormValidator.js';
 import { initialCards } from '../components/components.js';
+import Section from '../components/Section.js';
+import Popup from '../components/Popup.js';
 export { showImage, showCaption, openPopup, imgPopup };
 
 const editBtn = document.querySelector('.profile__edit-btn');
