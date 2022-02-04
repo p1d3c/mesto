@@ -1,4 +1,4 @@
-import { showImage, showCaption, openPopup, imgPopup } from './index.js';
+import { showImage, showCaption, openPopup, imgPopup } from '../pages/index.js';
 
 const initialCards = [
   {

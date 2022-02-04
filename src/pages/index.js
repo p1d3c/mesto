@@ -1,8 +1,8 @@
-import '../pages/index.css';
-import { Card } from './Card.js';
-import { selectorsConfig } from './selectorsConfig.js';
-import FormValidator from './FormValidator.js';
-import { initialCards } from './components.js';
+import './index.css';
+import { Card } from '../components/Card.js';
+import { selectorsConfig } from '../components/selectorsConfig.js';
+import FormValidator from '../components/FormValidator.js';
+import { initialCards } from '../components/components.js';
 export { showImage, showCaption, openPopup, imgPopup };
 
 const editBtn = document.querySelector('.profile__edit-btn');
