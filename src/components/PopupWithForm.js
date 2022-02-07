@@ -1,34 +1,40 @@
-import Popup from "./Popup";
-import { selectorsConfig } from "./selectorsConfig";
+import Popup from './Popup.js';
+import { selectorsConfig } from './selectorsConfig.js';
+import { addFormElement,
+  titleInput,
+  linkInput } from '../utils/constants.js';
 
 export default class PopupWithForm extends Popup {
-    constructor(popupSelector, submitFormCallback) {
-        super(popupSelector);
-        this._callback = submitFormCallback;
-        this._form = document.querySelector(selectorsConfig.formSelector);
-        this._fieldSelector = selectorsConfig.fieldSelector;
-        this._inputSelector = selectorsConfig.inputSelector;
-        this._inputValues = []; // [['qwe', 1], ['weq', 2]]
-    }
+  constructor({ popup, closeBtnSelector, submitFormCallback }) {
+    super({ popup, closeBtnSelector });
+    this._callback = submitFormCallback;
+    this._form = this._popup.querySelector(selectorsConfig.formSelector);
+    this._inputSelector = selectorsConfig.inputSelector;
+  }
 
-    _getInputValues() {
-        let fieldSetList = Array.from(this._form.querySelectorAll(this._fieldSelector));
-        fieldSetList.foreach(fieldset => {
-            let inputsInFieldset = fieldset.querySelectorAll(this._inputSelector);
-            this._inputValues.push(inputsInFieldset.map(input => input.value));
-        });
-    }
+  _getInputValues() {
+    this._inputList = this._popup.querySelectorAll(this._inputSelector);
+    this._formValues = {};
 
-    setEventListeners(evt) {
-        if (evt.target.classList.contains('popup__overlay')
-                || evt.target.classList.contains('popup__close-btn')) {
-            this.close();
-      }
-      this._form.addEventListener('submit', this._callback);
-    }
+    this._inputList.forEach(input => {
+      this._formValues[input.name] = input.value;
+    });
+    return this._formValues;
+  }
 
-    close() {
-        this._popup.classList.remove('popup_opened');
-        this._form.reset();
-    }
+  setEventListeners() {
+    this._closeBtn.addEventListener('click', () => this.close());
+
+    this._popupOverlay.addEventListener('click', () => this.close());
+
+    document.addEventListener('keydown', (evt) => this._handleEscClose(evt));
+
+    addFormElement.addEventListener('submit', (evt) => this._callback(this._getInputValues(), evt));
+  }
+
+  close() {
+    this._popup.classList.remove('popup_opened');
+    this._removeEventListeners();
+    this._form.reset();
+  }
 }
