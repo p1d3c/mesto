@@ -1,8 +1,7 @@
 export default class Popup {
-constructor({ popup,
-   closeBtnSelector }) {
+constructor({ popup }) {
     this._popup = popup;
-    this._closeBtn = closeBtnSelector;
+    this._closeBtn = this._popup.querySelector('.popup__close-btn');
     this._popupOverlay = this._popup.querySelector('.popup__overlay');
   }
 

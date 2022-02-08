@@ -1,15 +1,13 @@
 import Popup from './Popup.js';
 import { selectorsConfig } from './selectorsConfig.js';
-import { addFormElement,
-  titleInput,
-  linkInput } from '../utils/constants.js';
 
 export default class PopupWithForm extends Popup {
-  constructor({ popup, closeBtnSelector, submitFormCallback }) {
-    super({ popup, closeBtnSelector });
+  constructor({ popup, submitFormCallback }) {
+    super({ popup });
     this._callback = submitFormCallback;
     this._form = this._popup.querySelector(selectorsConfig.formSelector);
     this._inputSelector = selectorsConfig.inputSelector;
+    this._submitBtn = this._popup.querySelector('.popup__submit');
   }
 
   _getInputValues() {
@@ -22,14 +20,22 @@ export default class PopupWithForm extends Popup {
     return this._formValues;
   }
 
+  _removeEventListeners() {
+    super._removeEventListeners();
+    this._submitBtn.removeEventListener('submit', this._handleSubmit);
+  }
+
+  // _handleAddCardSubmit = (evt) => {
+  //   this._callback(this._getInputValues(), evt);
+  // }
+  _handleSubmit = (evt) => {
+    this._callback(evt);
+  }
+
   setEventListeners() {
-    this._closeBtn.addEventListener('click', () => this.close());
+    super._setEventListeners();
 
-    this._popupOverlay.addEventListener('click', () => this.close());
-
-    document.addEventListener('keydown', (evt) => this._handleEscClose(evt));
-
-    addFormElement.addEventListener('submit', (evt) => this._callback(this._getInputValues(), evt));
+    this._form.addEventListener('submit', this._handleSubmit);
   }
 
   close() {

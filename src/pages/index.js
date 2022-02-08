@@ -24,52 +24,61 @@ import { initialCards,
   linkInput,
   cardListSelector,
   showImage,
-  showCaption } from '../utils/constants.js';
+  showCaption } from '../utils/utils.js';
 import Section from '../components/Section.js';
 import Popup from '../components/Popup.js';
 import UserInfo from '../components/UserInfo.js';
 import PopupWithForm from '../components/PopupWithForm.js';
 // export { showImage, showCaption, openPopup, imgPopup };
+
+function createNewCard(classInstance, cardData, place) {
+      const card = new Card(cardData);
+      const cardElement = card.createCard();
+      classInstance.addItem(cardElement, place);
+}
+
+const userInformation = new UserInfo({
+  name: profName.textContent,
+  description: profJob.textContent,
+  popup: profilePopup
+});
+
 const renderInitialCards = new Section({
   items: initialCards,
   renderer: (initialCard) => {
-    const card = new Card(initialCard);
-    const cardElement = card.createCard();
-    renderInitialCards.addItem(cardElement, 'end');
+    createNewCard(renderInitialCards, initialCard, 'end');
     },
   },
   cardListSelector
 );
 
-const ProfilePopup = new Popup({
+const ProfilePopup = new PopupWithForm({
   popup: profilePopup,
-  closeBtnSelector: editCloseBtn
+  submitFormCallback: (evt) => {
+    evt.preventDefault();
+    userInformation.setUserInfo();
+    ProfilePopup.close();
+  }
 });
 
 const AddCardPopup = new PopupWithForm({
   popup: addCardPopup,
-  closeBtnSelector: addCloseBtn,
-  submitFormCallback: (newCardData, evt) => {
+  submitFormCallback: (evt) => {
       evt.preventDefault();
+      const newCardData = AddCardPopup._getInputValues();
       const renderNewCard = new Section({
         items: newCardData,
         renderer: (item) => {
-          const card = new Card(item);
-          const cardElement = card.createCard();
-          renderNewCard.addItem(cardElement, 'start');
-          addFormValidator.disableButton(
-            addSubmitBtn,
-            selectorsConfig.inactiveButtonClass);
+          createNewCard(renderNewCard, item, 'start');
           }
       },
       cardListSelector)
+      renderNewCard.renderItem('newCard');
+      addFormValidator.disableButton(
+        addSubmitBtn,
+        selectorsConfig.inactiveButtonClass);
       AddCardPopup.close();
   }
-});
-
-const userInformation = new UserInfo({
-  name: profName.textContent,
-  description: profJob.textContent
 });
 
 const editFormValidator = new FormValidator(
@@ -81,8 +90,6 @@ const addFormValidator = new FormValidator(
   selectorsConfig,
   '.popup__form_type_add'
 );
-
-
 // function closePopup(popup) {
 //   popup.classList.remove('popup_opened');
 
@@ -155,13 +162,14 @@ editBtn.addEventListener('click', () => {
   editFormValidator.hideErrorMessage();
   ProfilePopup.open();
   userInformation.getUserInfo();
+  ProfilePopup.setEventListeners()
 });
 
-editFormElement.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  userInformation.setUserInfo();
-  ProfilePopup.close();
-});
+// editFormElement.addEventListener('submit', (evt) => {
+//   evt.preventDefault();
+//   userInformation.setUserInfo();
+//   ProfilePopup.close();
+// });
 
 addBtn.addEventListener('click', () => {
   addFormValidator.enableValidation();
