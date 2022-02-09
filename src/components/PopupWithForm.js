@@ -25,9 +25,6 @@ export default class PopupWithForm extends Popup {
     this._submitBtn.removeEventListener('submit', this._handleSubmit);
   }
 
-  // _handleAddCardSubmit = (evt) => {
-  //   this._callback(this._getInputValues(), evt);
-  // }
   _handleSubmit = (evt) => {
     this._callback(evt);
   }

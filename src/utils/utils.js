@@ -27,8 +27,6 @@ export const initialCards = [
 
 export const editBtn = document.querySelector('.profile__edit-btn');
 export const addBtn = document.querySelector('.profile__add-btn');
-export const editCloseBtn = document.querySelector('button[name="edit-close"]');
-export const addCloseBtn = document.querySelector('button[name="add-close"]');
 
 export const profilePopup = document.querySelector('.popup_type_edit');
 export const addCardPopup = document.querySelector('.popup_type_add');
@@ -39,12 +37,12 @@ export const profJob = document.querySelector('.profile__subtitle');
 export const profilePopupName = document.querySelector('.popup__input_type_name');
 export const profilePopupJob = document.querySelector('.popup__input_type_job');
 
-export const editFormElement = document.querySelector('.popup__form_type_edit');
+export const editFormElement = '.popup__form_type_edit';
 export const editSubmitBtn = document.querySelector('button[name="edit-submit"]');
 export const nameInput = document.querySelector('.popup__input_type_name');
 export const jobInput = document.querySelector('.popup__input_type_job');
 
-export const addFormElement = document.querySelector('.popup__form_type_add');
+export const addFormElement = '.popup__form_type_add';
 export const addSubmitBtn = document.querySelector('button[name="add-submit"]');
 export const titleInput = document.querySelector('.popup__input_type_title');
 export const linkInput = document.querySelector('.popup__input_type_image');

@@ -1,7 +1,6 @@
-import PopupWithImage from './PopupWithImage.js';
-
 export default class Card {
-  constructor(data) {
+  constructor({ data, handleCardClick }) {
+    this._callback = handleCardClick;
     this._name = data.name;
     this._link = data.link;
     this._alt = data.name;
@@ -48,7 +47,7 @@ export default class Card {
   _setEventListeners() {
     this._delBtn.addEventListener('click', () => this._delCard());
     this._likeBtn.addEventListener('click', () => this._likeCard());
-    this._img.addEventListener('click', () => new PopupWithImage('.popup_type_img').open(this._data));
+    this._img.addEventListener('click', () => this._callback());
   }
 }
 

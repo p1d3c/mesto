@@ -1,7 +1,5 @@
 import { profilePopupName,
 profilePopupJob,
-nameInput,
-jobInput,
 profName,
 profJob } from '../utils/utils.js';
 import { selectorsConfig } from './selectorsConfig.js';
