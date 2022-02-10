@@ -5,14 +5,16 @@ import FormValidator from '../components/FormValidator.js';
 import { initialCards,
   editBtn,
   addBtn,
-  profilePopup,
-  addCardPopup,
-  imgPopup,
-  profName,
-  profJob,
-  editFormElement,
+  profilePopupElement,
+  addCardPopupElement,
+  imgPopupElement,
+  profNameSelector,
+  profJobSelector,
+  nameInput,
+  jobInput,
+  editFormElementSelector,
   editSubmitBtn,
-  addFormElement,
+  addFormElementSelector,
   addSubmitBtn,
   cardListSelector
 } from '../utils/utils.js';
@@ -21,89 +23,95 @@ import UserInfo from '../components/UserInfo.js';
 import PopupWithForm from '../components/PopupWithForm.js';
 import PopupWithImage from '../components/PopupWithImage.js';
 
-function createNewCard(classInstance, cardData, place) {
-  const card = new Card({ data: cardData,
+const openedImg = new PopupWithImage({
+  popup: imgPopupElement
+});
+
+function createNewCard(items, place) {
+  items.forEach(item => {
+    console.log(1);
+    const card = new Card({
+    data: item,
     handleCardClick: () => {
-      const openedImg = new PopupWithImage({
-        popup: imgPopup,
-        data: cardData
-      });
-      openedImg.open(cardData);
+      openedImg.open(item);
     }
   });
   const cardElement = card.createCard();
-  classInstance.addItem(cardElement, place);
+  cardsContainer.addItem(cardElement, place);
+  });
+}
+
+function fillProfilePopupInputs() {
+  const userInfo = userInformation.getUserInfo();
+  nameInput.value = userInfo.userName;
+  jobInput.value = userInfo.userJob;
 }
 
 const userInformation = new UserInfo({
-  name: profName.textContent,
-  description: profJob.textContent,
-  popup: profilePopup
+  nameSelector: profNameSelector,
+  jobSelector: profJobSelector,
 });
 
-const renderInitialCards = new Section({
-  items: initialCards,
-  renderer: (initialCard) => {
-    createNewCard(renderInitialCards, initialCard, 'end');
+const cardsContainer = new Section({
+  renderer: (item) => {
+    createNewCard(item, 'end');
     },
   },
   cardListSelector
 );
 
-const ProfilePopup = new PopupWithForm({
-  popup: profilePopup,
+const profilePopup = new PopupWithForm({
+  popup: profilePopupElement,
   submitFormCallback: (evt) => {
     evt.preventDefault();
-    userInformation.setUserInfo();
-    ProfilePopup.close();
+    userInformation.setUserInfo({
+      name: nameInput.value,
+      job: jobInput.value
+    });
+    profilePopup.close();
   }
 });
 
-const AddCardPopup = new PopupWithForm({
-  popup: addCardPopup,
+const addCardPopup = new PopupWithForm({
+  popup: addCardPopupElement,
   submitFormCallback: (evt) => {
       evt.preventDefault();
-      const newCardData = AddCardPopup._getInputValues();
-      const renderNewCard = new Section({
-        items: newCardData,
-        renderer: (item) => {
-          createNewCard(renderNewCard, item, 'start');
-          }
-      },
-      cardListSelector)
-      renderNewCard.renderItem('newCard');
+      const newCardData = addCardPopup.getInputValues();
       addFormValidator.disableButton(
         addSubmitBtn,
         selectorsConfig.inactiveButtonClass);
-      AddCardPopup.close();
+      addCardPopup.close();
   }
 });
 
 const editFormValidator = new FormValidator(
   selectorsConfig,
-  editFormElement
+  editFormElementSelector
 );
+editFormValidator.enableValidation();
 
 const addFormValidator = new FormValidator(
   selectorsConfig,
-  addFormElement
+  addFormElementSelector
 );
+addFormValidator.enableValidation();
 
-window.onload = renderInitialCards.renderItem();
+profilePopup.setEventListeners();
+addCardPopup.setEventListeners();
+
+window.onload = cardsContainer.addItem(createNewCard(initialCards, 'end'));
 
 editBtn.addEventListener('click', () => {
-  editFormValidator.enableValidation();
   editFormValidator.activateButton(
     editSubmitBtn,
     selectorsConfig.inactiveButtonClass);
   editFormValidator.hideErrorMessage();
-  ProfilePopup.open();
-  userInformation.getUserInfo();
-  ProfilePopup.setEventListeners()
+  profilePopup.open();
+  fillProfilePopupInputs();
 });
 
 addBtn.addEventListener('click', () => {
   addFormValidator.enableValidation();
-  AddCardPopup.open();
-  AddCardPopup.setEventListeners();
+  addFormValidator.hideErrorMessage();
+  addCardPopup.open();
 });

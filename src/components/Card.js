@@ -5,20 +5,15 @@ export default class Card {
     this._link = data.link;
     this._alt = data.name;
     this._data = data;
-  }
-
-  _getTemplate() {
-    const elementCard = document
-      .querySelector('#temp')
-      .content
-      .querySelector('.element')
-      .cloneNode(true);
-
-    return elementCard;
+    this._template = document
+    .querySelector('#temp')
+    .content
+    .querySelector('.element')
+    .cloneNode(true);
   }
 
   createCard() {
-    this._elementCard = this._getTemplate();
+    this._elementCard = this._template;
     this._img = this._elementCard.querySelector('.element__image');
     this._title = this._elementCard.querySelector('.element__title');
     this._likeBtn = this._elementCard.querySelector('.element__heart');
@@ -34,10 +29,10 @@ export default class Card {
   }
 
   _delCard() {
-    this._elementCard.remove();
     this._delBtn = null;
     this._likeBtn = null;
     this._img = null;
+    this._elementCard.remove(); // need to null(how?). this._element = null doesnt't work :/
   }
 
   _likeCard() {
