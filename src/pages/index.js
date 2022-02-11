@@ -16,7 +16,8 @@ import { initialCards,
   editSubmitBtn,
   addFormElementSelector,
   addSubmitBtn,
-  cardListSelector
+  cardListSelector,
+  templateSelector
 } from '../utils/utils.js';
 import Section from '../components/Section.js';
 import UserInfo from '../components/UserInfo.js';
@@ -32,7 +33,8 @@ function createNewCard(item) {
     data: item,
     handleCardClick: () => {
       openedImg.open(item);
-    }
+    },
+    templateSelector
   });
   const cardElement = card.createCard();
 
@@ -112,7 +114,6 @@ editBtn.addEventListener('click', () => {
 });
 
 addBtn.addEventListener('click', () => {
-  addFormValidator.enableValidation();
   addFormValidator.hideErrorMessage();
   addCardPopup.open();
 });

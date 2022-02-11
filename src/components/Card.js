@@ -1,19 +1,20 @@
 export default class Card {
-  constructor({ data, handleCardClick }) {
+  constructor({ data, handleCardClick, templateSelector }) {
     this._callback = handleCardClick;
     this._name = data.name;
     this._link = data.link;
     this._alt = data.name;
     this._data = data;
-    this._template = document
-    .querySelector('#temp')
-    .content
-    .querySelector('.element')
-    .cloneNode(true);
+    this._templateSelector = templateSelector;
   }
 
   createCard() {
-    this._elementCard = this._template;
+    this._elementCard = document
+    .querySelector(this._templateSelector)
+    .content
+    .querySelector('.element')
+    .cloneNode(true);
+
     this._img = this._elementCard.querySelector('.element__image');
     this._title = this._elementCard.querySelector('.element__title');
     this._likeBtn = this._elementCard.querySelector('.element__heart');

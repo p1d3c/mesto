@@ -49,5 +49,4 @@ export const linkInput = document.querySelector('.popup__input_type_image');
 
 export const cardListSelector = '.elements';
 
-export const showImage = imgPopupElement.querySelector('.popup__image');
-export const showCaption = imgPopupElement.querySelector('.popup__caption');
+export const templateSelector = '#temp';

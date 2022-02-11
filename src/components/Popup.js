@@ -7,12 +7,10 @@ constructor({ popup }) {
 
   open() {
     this._popup.classList.add('popup_opened');
-    this._setEventListeners();
   }
 
-  close = () => {
+  close() {
     this._popup.classList.remove('popup_opened');
-    this._removeEventListeners();
   }
 
   _handleEscClose = (evt) => {
@@ -22,18 +20,10 @@ constructor({ popup }) {
   }
 
   _setEventListeners() {
-    this._closeBtn.addEventListener('click', this.close);
+    this._closeBtn.addEventListener('click', () => this.close());
 
-    this._popupOverlay.addEventListener('click', this.close);
+    this._popupOverlay.addEventListener('click', () => this.close());
 
     document.addEventListener('keydown', this._handleEscClose);
-  }
-
-  _removeEventListeners() {
-    this._closeBtn.removeEventListener('click', this.close);
-
-    this._popupOverlay.removeEventListener('click', this.close);
-
-    document.removeEventListener('keydown', this._handleEscClose);
   }
 }
