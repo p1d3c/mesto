@@ -27,18 +27,16 @@ const openedImg = new PopupWithImage({
   popup: imgPopupElement
 });
 
-function createNewCard(items, place) {
-  items.forEach(item => {
-    console.log(1);
-    const card = new Card({
+function createNewCard(item) {
+  const card = new Card({
     data: item,
     handleCardClick: () => {
       openedImg.open(item);
     }
   });
   const cardElement = card.createCard();
-  cardsContainer.addItem(cardElement, place);
-  });
+
+  return cardElement;
 }
 
 function fillProfilePopupInputs() {
@@ -54,7 +52,8 @@ const userInformation = new UserInfo({
 
 const cardsContainer = new Section({
   renderer: (item) => {
-    createNewCard(item, 'end');
+    const initialCard = createNewCard(item);
+    cardsContainer.addItem(initialCard, 'end');
     },
   },
   cardListSelector
@@ -77,6 +76,8 @@ const addCardPopup = new PopupWithForm({
   submitFormCallback: (evt) => {
       evt.preventDefault();
       const newCardData = addCardPopup.getInputValues();
+      const newCard = createNewCard(newCardData);
+      cardsContainer.addItem(newCard, 'start');
       addFormValidator.disableButton(
         addSubmitBtn,
         selectorsConfig.inactiveButtonClass);
@@ -99,7 +100,7 @@ addFormValidator.enableValidation();
 profilePopup.setEventListeners();
 addCardPopup.setEventListeners();
 
-window.onload = cardsContainer.addItem(createNewCard(initialCards, 'end'));
+window.onload = cardsContainer.renderItems(initialCards);
 
 editBtn.addEventListener('click', () => {
   editFormValidator.activateButton(

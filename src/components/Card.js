@@ -29,10 +29,11 @@ export default class Card {
   }
 
   _delCard() {
+    this._elementCard.remove();
+    this._elementCard = null;
     this._delBtn = null;
     this._likeBtn = null;
     this._img = null;
-    this._elementCard.remove(); // need to null(how?). this._element = null doesnt't work :/
   }
 
   _likeCard() {
