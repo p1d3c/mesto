@@ -468,6 +468,8 @@ var PopupWithImage = /*#__PURE__*/function (_Popup) {
     value: function open(cardData) {
       _get(_getPrototypeOf(PopupWithImage.prototype), "open", this).call(this);
 
+      _get(_getPrototypeOf(PopupWithImage.prototype), "_setEventListeners", this).call(this);
+
       this._image.src = cardData.link;
       this._image.alt = cardData.name;
       this._caption.textContent = cardData.name;
