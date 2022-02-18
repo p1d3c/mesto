@@ -493,11 +493,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Section)
 /* harmony export */ });
+/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/utils */ "./src/utils/utils.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+
 
 var Section = /*#__PURE__*/function () {
   function Section(_ref, containerSelector) {
@@ -515,7 +518,9 @@ var Section = /*#__PURE__*/function () {
       var _this = this;
 
       items.forEach(function (item) {
-        _this._renderer(item);
+        if (item.owner._id === _utils_utils__WEBPACK_IMPORTED_MODULE_0__.ownerId) {
+          _this._renderer(item);
+        }
       });
     }
   }, {
@@ -619,7 +624,8 @@ var selectorsConfig = {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "initialCards": () => (/* binding */ initialCards),
+/* harmony export */   "token": () => (/* binding */ token),
+/* harmony export */   "ownerId": () => (/* binding */ ownerId),
 /* harmony export */   "editBtn": () => (/* binding */ editBtn),
 /* harmony export */   "addBtn": () => (/* binding */ addBtn),
 /* harmony export */   "profilePopupElement": () => (/* binding */ profilePopupElement),
@@ -640,25 +646,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "cardListSelector": () => (/* binding */ cardListSelector),
 /* harmony export */   "templateSelector": () => (/* binding */ templateSelector)
 /* harmony export */ });
-var initialCards = [{
-  name: 'Архыз',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-}, {
-  name: 'Челябинская область',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-}, {
-  name: 'Иваново',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-}, {
-  name: 'Камчатка',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-}, {
-  name: 'Холмогорский район',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-}, {
-  name: 'Байкал',
-  link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-}];
+var token = '1fc6d210-8890-4051-a715-d0338c476cfd';
+var ownerId = 'dfde4bcda101257a7e2cdc57';
 var editBtn = document.querySelector('.profile__edit-btn');
 var addBtn = document.querySelector('.profile__add-btn');
 var profilePopupElement = document.querySelector('.popup_type_edit');
@@ -774,6 +763,27 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+fetch('https://nomoreparties.co/v1/cohort36/users/me', {
+  headers: {
+    authorization: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.token,
+    'Content-Type': 'application/json; charset=UTF-8'
+  }
+}).then(function (res) {
+  if (res.ok) {
+    return res.json();
+  }
+
+  return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
+}).then(function (res) {
+  userInformation.setUserInfo({
+    name: res.name,
+    job: res.about
+  });
+});
+var userInformation = new _components_UserInfo_js__WEBPACK_IMPORTED_MODULE_6__["default"]({
+  nameSelector: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.profNameSelector,
+  jobSelector: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.profJobSelector
+});
 var openedImg = new _components_PopupWithImage_js__WEBPACK_IMPORTED_MODULE_8__["default"]({
   popup: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.imgPopupElement
 });
@@ -796,10 +806,6 @@ function fillProfilePopupInputs() {
   _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.jobInput.value = userInfo.userJob;
 }
 
-var userInformation = new _components_UserInfo_js__WEBPACK_IMPORTED_MODULE_6__["default"]({
-  nameSelector: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.profNameSelector,
-  jobSelector: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.profJobSelector
-});
 var cardsContainer = new _components_Section_js__WEBPACK_IMPORTED_MODULE_5__["default"]({
   renderer: function renderer(item) {
     var initialCard = createNewCard(item);
@@ -810,9 +816,27 @@ var profilePopup = new _components_PopupWithForm_js__WEBPACK_IMPORTED_MODULE_7__
   popup: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.profilePopupElement,
   submitFormCallback: function submitFormCallback(evt) {
     evt.preventDefault();
-    userInformation.setUserInfo({
-      name: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.nameInput.value,
-      job: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.jobInput.value
+    fetch('https://mesto.nomoreparties.co/v1/cohort36/users/me', {
+      method: 'PATCH',
+      headers: {
+        authorization: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.token,
+        'Content-Type': 'application/json; charset=UTF-8'
+      },
+      body: JSON.stringify({
+        name: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.nameInput.value,
+        about: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.jobInput.value
+      })
+    }).then(function (res) {
+      if (res.ok) {
+        return res.json();
+      }
+
+      return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
+    }).then(function (res) {
+      userInformation.setUserInfo({
+        name: res.name,
+        job: res.about
+      });
     });
     profilePopup.close();
   }
@@ -822,8 +846,26 @@ var addCardPopup = new _components_PopupWithForm_js__WEBPACK_IMPORTED_MODULE_7__
   submitFormCallback: function submitFormCallback(evt) {
     evt.preventDefault();
     var newCardData = addCardPopup.getInputValues();
-    var newCard = createNewCard(newCardData);
-    cardsContainer.addItem(newCard, 'start');
+    fetch('https://mesto.nomoreparties.co/v1/cohort36/cards', {
+      method: 'POST',
+      headers: {
+        authorization: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.token,
+        'Content-Type': 'application/json; charset=UTF-8'
+      },
+      body: JSON.stringify({
+        name: newCardData.name,
+        link: newCardData.link
+      })
+    }).then(function (res) {
+      if (res.ok) {
+        return res.json();
+      }
+
+      return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
+    }).then(function (res) {
+      var newCard = createNewCard(newCardData);
+      cardsContainer.addItem(newCard, 'start');
+    });
     addFormValidator.disableButton(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.addSubmitBtn, _components_selectorsConfig_js__WEBPACK_IMPORTED_MODULE_2__.selectorsConfig.inactiveButtonClass);
     addCardPopup.close();
   }
@@ -833,8 +875,8 @@ editFormValidator.enableValidation();
 var addFormValidator = new _components_FormValidator_js__WEBPACK_IMPORTED_MODULE_3__["default"](_components_selectorsConfig_js__WEBPACK_IMPORTED_MODULE_2__.selectorsConfig, _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.addFormElementSelector);
 addFormValidator.enableValidation();
 profilePopup.setEventListeners();
-addCardPopup.setEventListeners();
-window.onload = cardsContainer.renderItems(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.initialCards);
+addCardPopup.setEventListeners(); // window.onload = cardsContainer.renderItems(initialCards);
+
 _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.editBtn.addEventListener('click', function () {
   editFormValidator.activateButton(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.editSubmitBtn, _components_selectorsConfig_js__WEBPACK_IMPORTED_MODULE_2__.selectorsConfig.inactiveButtonClass);
   editFormValidator.hideErrorMessage();
@@ -845,6 +887,25 @@ _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.addBtn.addEventListener('click', fu
   addFormValidator.hideErrorMessage();
   addCardPopup.open();
 });
+
+function renderInitialCards() {
+  fetch('https://nomoreparties.co/v1/cohort36/cards', {
+    headers: {
+      authorization: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.token,
+      'Content-Type': 'application/json; charset=UTF-8'
+    }
+  }).then(function (res) {
+    if (res.ok) {
+      return res.json();
+    }
+
+    return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
+  }).then(function (res) {
+    cardsContainer.renderItems(res);
+  });
+}
+
+window.onload = renderInitialCards();
 })();
 
 /******/ })()
