@@ -1,3 +1,5 @@
+import { ownerId } from '../utils/utils';
+
 export default class Section {
   constructor({ renderer }, containerSelector) {
     this._renderer = renderer;
@@ -6,7 +8,9 @@ export default class Section {
 
   renderItems(items) {
     items.forEach(item => {
-      this._renderer(item);
+      if (item.owner._id === ownerId) {
+        this._renderer(item);
+      }
     });
   }
 
