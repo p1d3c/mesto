@@ -7,6 +7,7 @@ import { editBtn,
   profilePopupElement,
   addCardPopupElement,
   imgPopupElement,
+  delCardPopupElement,
   profNameSelector,
   profJobSelector,
   nameInput,
@@ -55,8 +56,11 @@ const openedImg = new PopupWithImage({
 function createNewCard(item) {
   const card = new Card({
     data: item,
-    handleCardClick: () => {
+    handleImgClick: () => {
       openedImg.open(item);
+    },
+    handleDelClick: () => {
+      delCardPopup.open();
     },
     templateSelector
   });
@@ -137,7 +141,7 @@ const addCardPopup = new PopupWithForm({
       return Promise.reject(`Ошибка: ${res.status}`)
     })
     .then((res) => {
-      const newCard = createNewCard(newCardData);
+      const newCard = createNewCard(res);
       cardsContainer.addItem(newCard, 'start');
     })
     addFormValidator.disableButton(
@@ -146,6 +150,14 @@ const addCardPopup = new PopupWithForm({
     addCardPopup.close();
   }
 });
+
+const delCardPopup = new PopupWithForm({
+  popup: delCardPopupElement,
+  submitFormCallback: (evt) => {
+    evt.preventDefault();
+    console.log()
+  }
+})
 
 const editFormValidator = new FormValidator(
   selectorsConfig,
@@ -161,22 +173,7 @@ addFormValidator.enableValidation();
 
 profilePopup.setEventListeners();
 addCardPopup.setEventListeners();
-
-// window.onload = cardsContainer.renderItems(initialCards);
-
-editBtn.addEventListener('click', () => {
-  editFormValidator.activateButton(
-    editSubmitBtn,
-    selectorsConfig.inactiveButtonClass);
-  editFormValidator.hideErrorMessage();
-  profilePopup.open();
-  fillProfilePopupInputs();
-});
-
-addBtn.addEventListener('click', () => {
-  addFormValidator.hideErrorMessage();
-  addCardPopup.open();
-});
+delCardPopup.setEventListeners();
 
 function renderInitialCards() {
   fetch('https://nomoreparties.co/v1/cohort36/cards', {
@@ -198,3 +195,18 @@ function renderInitialCards() {
 }
 
 window.onload = renderInitialCards();
+
+editBtn.addEventListener('click', () => {
+  editFormValidator.activateButton(
+    editSubmitBtn,
+    selectorsConfig.inactiveButtonClass);
+  editFormValidator.hideErrorMessage();
+  profilePopup.open();
+  fillProfilePopupInputs();
+});
+
+addBtn.addEventListener('click', () => {
+  addFormValidator.hideErrorMessage();
+  addCardPopup.open();
+});
+

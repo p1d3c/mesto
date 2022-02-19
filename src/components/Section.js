@@ -8,9 +8,9 @@ export default class Section {
 
   renderItems(items) {
     items.forEach(item => {
-      if (item.owner._id === ownerId) {
+      // if (item.owner._id === ownerId) {
         this._renderer(item);
-      }
+      // }
     });
   }
 

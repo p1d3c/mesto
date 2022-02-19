@@ -7,6 +7,7 @@ export const addBtn = document.querySelector('.profile__add-btn');
 export const profilePopupElement = document.querySelector('.popup_type_edit');
 export const addCardPopupElement = document.querySelector('.popup_type_add');
 export const imgPopupElement = document.querySelector('.popup_type_img');
+export const delCardPopupElement = document.querySelector('.popup_type_del-confirm');
 
 export const profNameSelector = '.profile__title';
 export const profJobSelector = '.profile__subtitle';
