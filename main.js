@@ -12,21 +12,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Card)
 /* harmony export */ });
+/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/utils */ "./src/utils/utils.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
+
+
 var Card = /*#__PURE__*/function () {
   function Card(_ref) {
     var data = _ref.data,
-        handleCardClick = _ref.handleCardClick,
+        handleImgClick = _ref.handleImgClick,
+        handleDelClick = _ref.handleDelClick,
         templateSelector = _ref.templateSelector;
 
     _classCallCheck(this, Card);
 
-    this._callback = handleCardClick;
+    this._imgCallback = handleImgClick;
+    this._delCallback = handleDelClick;
     this._name = data.name;
     this._link = data.link;
     this._alt = data.name;
@@ -42,9 +47,13 @@ var Card = /*#__PURE__*/function () {
       this._title = this._elementCard.querySelector('.element__title');
       this._likeBtn = this._elementCard.querySelector('.element__heart');
       this._delBtn = this._elementCard.querySelector('.element__button');
+      this._likesCount = this._elementCard.querySelector('.element__likes-count');
       this._img.src = this._link;
       this._img.alt = this._alt;
       this._title.textContent = this._name;
+      this._likesCount.textContent = this._data.likes.length || '0';
+
+      this._isOwner();
 
       this._setEventListeners();
 
@@ -71,7 +80,7 @@ var Card = /*#__PURE__*/function () {
       var _this = this;
 
       this._delBtn.addEventListener('click', function () {
-        return _this._delCard();
+        return _this._delCallback();
       });
 
       this._likeBtn.addEventListener('click', function () {
@@ -79,8 +88,15 @@ var Card = /*#__PURE__*/function () {
       });
 
       this._img.addEventListener('click', function () {
-        return _this._callback();
+        return _this._imgCallback();
       });
+    }
+  }, {
+    key: "_isOwner",
+    value: function _isOwner() {
+      if (this._data.owner._id != _utils_utils__WEBPACK_IMPORTED_MODULE_0__.ownerId) {
+        this._delBtn.style.display = 'none';
+      }
     }
   }]);
 
@@ -518,9 +534,9 @@ var Section = /*#__PURE__*/function () {
       var _this = this;
 
       items.forEach(function (item) {
-        if (item.owner._id === _utils_utils__WEBPACK_IMPORTED_MODULE_0__.ownerId) {
-          _this._renderer(item);
-        }
+        // if (item.owner._id === ownerId) {
+        _this._renderer(item); // }
+
       });
     }
   }, {
@@ -631,6 +647,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "profilePopupElement": () => (/* binding */ profilePopupElement),
 /* harmony export */   "addCardPopupElement": () => (/* binding */ addCardPopupElement),
 /* harmony export */   "imgPopupElement": () => (/* binding */ imgPopupElement),
+/* harmony export */   "delCardPopupElement": () => (/* binding */ delCardPopupElement),
 /* harmony export */   "profNameSelector": () => (/* binding */ profNameSelector),
 /* harmony export */   "profJobSelector": () => (/* binding */ profJobSelector),
 /* harmony export */   "profilePopupName": () => (/* binding */ profilePopupName),
@@ -653,6 +670,7 @@ var addBtn = document.querySelector('.profile__add-btn');
 var profilePopupElement = document.querySelector('.popup_type_edit');
 var addCardPopupElement = document.querySelector('.popup_type_add');
 var imgPopupElement = document.querySelector('.popup_type_img');
+var delCardPopupElement = document.querySelector('.popup_type_del-confirm');
 var profNameSelector = '.profile__title';
 var profJobSelector = '.profile__subtitle';
 var profilePopupName = document.querySelector('.popup__input_type_name');
@@ -791,8 +809,11 @@ var openedImg = new _components_PopupWithImage_js__WEBPACK_IMPORTED_MODULE_8__["
 function createNewCard(item) {
   var card = new _components_Card_js__WEBPACK_IMPORTED_MODULE_1__["default"]({
     data: item,
-    handleCardClick: function handleCardClick() {
+    handleImgClick: function handleImgClick() {
       openedImg.open(item);
+    },
+    handleDelClick: function handleDelClick() {
+      delCardPopup.open();
     },
     templateSelector: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.templateSelector
   });
@@ -863,11 +884,18 @@ var addCardPopup = new _components_PopupWithForm_js__WEBPACK_IMPORTED_MODULE_7__
 
       return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
     }).then(function (res) {
-      var newCard = createNewCard(newCardData);
+      var newCard = createNewCard(res);
       cardsContainer.addItem(newCard, 'start');
     });
     addFormValidator.disableButton(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.addSubmitBtn, _components_selectorsConfig_js__WEBPACK_IMPORTED_MODULE_2__.selectorsConfig.inactiveButtonClass);
     addCardPopup.close();
+  }
+});
+var delCardPopup = new _components_PopupWithForm_js__WEBPACK_IMPORTED_MODULE_7__["default"]({
+  popup: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.delCardPopupElement,
+  submitFormCallback: function submitFormCallback(evt) {
+    evt.preventDefault();
+    console.log();
   }
 });
 var editFormValidator = new _components_FormValidator_js__WEBPACK_IMPORTED_MODULE_3__["default"](_components_selectorsConfig_js__WEBPACK_IMPORTED_MODULE_2__.selectorsConfig, _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.editFormElementSelector);
@@ -875,18 +903,8 @@ editFormValidator.enableValidation();
 var addFormValidator = new _components_FormValidator_js__WEBPACK_IMPORTED_MODULE_3__["default"](_components_selectorsConfig_js__WEBPACK_IMPORTED_MODULE_2__.selectorsConfig, _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.addFormElementSelector);
 addFormValidator.enableValidation();
 profilePopup.setEventListeners();
-addCardPopup.setEventListeners(); // window.onload = cardsContainer.renderItems(initialCards);
-
-_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.editBtn.addEventListener('click', function () {
-  editFormValidator.activateButton(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.editSubmitBtn, _components_selectorsConfig_js__WEBPACK_IMPORTED_MODULE_2__.selectorsConfig.inactiveButtonClass);
-  editFormValidator.hideErrorMessage();
-  profilePopup.open();
-  fillProfilePopupInputs();
-});
-_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.addBtn.addEventListener('click', function () {
-  addFormValidator.hideErrorMessage();
-  addCardPopup.open();
-});
+addCardPopup.setEventListeners();
+delCardPopup.setEventListeners();
 
 function renderInitialCards() {
   fetch('https://nomoreparties.co/v1/cohort36/cards', {
@@ -906,6 +924,16 @@ function renderInitialCards() {
 }
 
 window.onload = renderInitialCards();
+_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.editBtn.addEventListener('click', function () {
+  editFormValidator.activateButton(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.editSubmitBtn, _components_selectorsConfig_js__WEBPACK_IMPORTED_MODULE_2__.selectorsConfig.inactiveButtonClass);
+  editFormValidator.hideErrorMessage();
+  profilePopup.open();
+  fillProfilePopupInputs();
+});
+_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.addBtn.addEventListener('click', function () {
+  addFormValidator.hideErrorMessage();
+  addCardPopup.open();
+});
 })();
 
 /******/ })()
