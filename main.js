@@ -2,6 +2,163 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/components/Api.js":
+/*!*******************************!*\
+  !*** ./src/components/Api.js ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Api)
+/* harmony export */ });
+/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/utils */ "./src/utils/utils.js");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+
+
+var Api = /*#__PURE__*/function () {
+  function Api(_ref) {
+    var baseUrl = _ref.baseUrl,
+        headers = _ref.headers,
+        renderCardsCallback = _ref.renderCardsCallback,
+        setUserInfoCallback = _ref.setUserInfoCallback,
+        addNewCardCallback = _ref.addNewCardCallback;
+
+    _classCallCheck(this, Api);
+
+    this._cardsContainer = [];
+    this._baseUrl = baseUrl;
+    this._headers = headers;
+    this._renderCardsCallback = renderCardsCallback;
+    this._setUserInfoCallback = setUserInfoCallback;
+    this._addNewCardCallback = addNewCardCallback;
+  }
+
+  _createClass(Api, [{
+    key: "getInitialCards",
+    value: function getInitialCards() {
+      var _this = this;
+
+      fetch(this._baseUrl + '/cards', {
+        headers: this._headers
+      }).then(function (res) {
+        if (res.ok) {
+          return res.json();
+        }
+
+        return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
+      }).then(function (res) {
+        _this._cardsContainer = res;
+      }).then(function () {
+        console.log(_this._cardsContainer);
+
+        _this._renderInitialCards();
+      });
+    }
+  }, {
+    key: "_renderInitialCards",
+    value: function _renderInitialCards() {
+      this._renderCardsCallback(this._cardsContainer);
+    }
+  }, {
+    key: "getUserInfo",
+    value: function getUserInfo() {
+      var _this2 = this;
+
+      fetch(this._baseUrl + '/users/me', {
+        headers: this._headers
+      }).then(function (res) {
+        if (res.ok) {
+          return res.json();
+        }
+
+        return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
+      }).then(function (res) {
+        _this2._setUserInfoCallback(res);
+      });
+    }
+  }, {
+    key: "setUserinfo",
+    value: function setUserinfo(_ref2) {
+      var _this3 = this;
+
+      var name = _ref2.name,
+          about = _ref2.about;
+      fetch(this._baseUrl + '/users/me', {
+        method: 'PATCH',
+        headers: this._headers,
+        body: JSON.stringify({
+          name: name,
+          about: about
+        })
+      }).then(function (res) {
+        if (res.ok) {
+          return res.json();
+        }
+
+        return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
+      }).then(function (res) {
+        _this3._setUserInfoCallback(res);
+      });
+    }
+  }, {
+    key: "addCard",
+    value: function addCard(_ref3) {
+      var _this4 = this;
+
+      var name = _ref3.name,
+          link = _ref3.link;
+      fetch(this._baseUrl + '/cards', {
+        method: 'POST',
+        headers: this._headers,
+        body: JSON.stringify({
+          name: name,
+          link: link
+        })
+      }).then(function (res) {
+        if (res.ok) {
+          return res.json();
+        }
+
+        return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
+      }).then(function (res) {
+        _this4._addNewCardCallback(res);
+
+        console.log(res);
+
+        _this4._cardsContainer.unshift(res);
+      }).then(function () {
+        console.log(_this4._cardsContainer);
+      });
+    }
+  }, {
+    key: "delCard",
+    value: function delCard(cardId) {
+      fetch(this._baseUrl + "/cards/".concat(cardId), {
+        method: 'DELETE',
+        headers: this._headers
+      }).then(function (res) {
+        if (res.ok) {
+          return;
+        }
+
+        return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
+      });
+    }
+  }]);
+
+  return Api;
+}();
+
+
+
+/***/ }),
+
 /***/ "./src/components/Card.js":
 /*!********************************!*\
   !*** ./src/components/Card.js ***!
@@ -60,8 +217,8 @@ var Card = /*#__PURE__*/function () {
       return this._elementCard;
     }
   }, {
-    key: "_delCard",
-    value: function _delCard() {
+    key: "delCard",
+    value: function delCard() {
       this._elementCard.remove();
 
       this._elementCard = null;
@@ -79,8 +236,8 @@ var Card = /*#__PURE__*/function () {
     value: function _setEventListeners() {
       var _this = this;
 
-      this._delBtn.addEventListener('click', function () {
-        return _this._delCallback();
+      this._delBtn.addEventListener('click', function (evt) {
+        return _this._delCallback(evt);
       });
 
       this._likeBtn.addEventListener('click', function () {
@@ -284,8 +441,8 @@ var Popup = /*#__PURE__*/function () {
       this._popup.classList.remove('popup_opened');
     }
   }, {
-    key: "_setEventListeners",
-    value: function _setEventListeners() {
+    key: "setEventListeners",
+    value: function setEventListeners() {
       var _this2 = this;
 
       this._closeBtn.addEventListener('click', function () {
@@ -302,6 +459,83 @@ var Popup = /*#__PURE__*/function () {
 
   return Popup;
 }();
+
+
+
+/***/ }),
+
+/***/ "./src/components/PopupWithConfirmation.js":
+/*!*************************************************!*\
+  !*** ./src/components/PopupWithConfirmation.js ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ PopupWithConfirmation)
+/* harmony export */ });
+/* harmony import */ var _Popup__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Popup */ "./src/components/Popup.js");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+var PopupWithConfirmation = /*#__PURE__*/function (_Popup) {
+  _inherits(PopupWithConfirmation, _Popup);
+
+  var _super = _createSuper(PopupWithConfirmation);
+
+  function PopupWithConfirmation(_ref) {
+    var _this;
+
+    var popup = _ref.popup;
+
+    _classCallCheck(this, PopupWithConfirmation);
+
+    _this = _super.call(this, {
+      popup: popup
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "_handleSubmitCallback", function (evt) {
+      _this._submitCallback(evt);
+    });
+
+    _this._form = _this._popup.querySelector('.popup__form');
+    return _this;
+  }
+
+  _createClass(PopupWithConfirmation, [{
+    key: "setSubmitAction",
+    value: function setSubmitAction(action) {
+      this._submitCallback = action;
+
+      this._form.addEventListener('submit', this._handleSubmitCallback);
+    }
+  }]);
+
+  return PopupWithConfirmation;
+}(_Popup__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 
 
@@ -400,7 +634,7 @@ var PopupWithForm = /*#__PURE__*/function (_Popup) {
   }, {
     key: "setEventListeners",
     value: function setEventListeners() {
-      _get(_getPrototypeOf(PopupWithForm.prototype), "_setEventListeners", this).call(this);
+      _get(_getPrototypeOf(PopupWithForm.prototype), "setEventListeners", this).call(this);
 
       this._form.addEventListener('submit', this._handleSubmit);
     }
@@ -484,7 +718,7 @@ var PopupWithImage = /*#__PURE__*/function (_Popup) {
     value: function open(cardData) {
       _get(_getPrototypeOf(PopupWithImage.prototype), "open", this).call(this);
 
-      _get(_getPrototypeOf(PopupWithImage.prototype), "_setEventListeners", this).call(this);
+      _get(_getPrototypeOf(PopupWithImage.prototype), "setEventListeners", this).call(this);
 
       this._image.src = cardData.link;
       this._image.alt = cardData.name;
@@ -772,6 +1006,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_UserInfo_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../components/UserInfo.js */ "./src/components/UserInfo.js");
 /* harmony import */ var _components_PopupWithForm_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../components/PopupWithForm.js */ "./src/components/PopupWithForm.js");
 /* harmony import */ var _components_PopupWithImage_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../components/PopupWithImage.js */ "./src/components/PopupWithImage.js");
+/* harmony import */ var _components_PopupWithConfirmation_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../components/PopupWithConfirmation.js */ "./src/components/PopupWithConfirmation.js");
+/* harmony import */ var _components_Api__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../components/Api */ "./src/components/Api.js");
 
 
 
@@ -781,22 +1017,27 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-fetch('https://nomoreparties.co/v1/cohort36/users/me', {
+
+
+var api = new _components_Api__WEBPACK_IMPORTED_MODULE_10__["default"]({
+  baseUrl: 'https://nomoreparties.co/v1/cohort36',
   headers: {
     authorization: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.token,
     'Content-Type': 'application/json; charset=UTF-8'
+  },
+  renderCardsCallback: function renderCardsCallback(items) {
+    cardsContainer.renderItems(items);
+  },
+  setUserInfoCallback: function setUserInfoCallback(res) {
+    userInformation.setUserInfo({
+      name: res.name,
+      job: res.about
+    });
+  },
+  addNewCardCallback: function addNewCardCallback(res) {
+    var newCard = createNewCard(res);
+    cardsContainer.addItem(newCard, 'start');
   }
-}).then(function (res) {
-  if (res.ok) {
-    return res.json();
-  }
-
-  return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
-}).then(function (res) {
-  userInformation.setUserInfo({
-    name: res.name,
-    job: res.about
-  });
 });
 var userInformation = new _components_UserInfo_js__WEBPACK_IMPORTED_MODULE_6__["default"]({
   nameSelector: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.profNameSelector,
@@ -813,6 +1054,12 @@ function createNewCard(item) {
       openedImg.open(item);
     },
     handleDelClick: function handleDelClick() {
+      delCardPopup.setSubmitAction(function (evt) {
+        evt.preventDefault();
+        api.delCard(item._id);
+        card.delCard();
+        delCardPopup.close();
+      });
       delCardPopup.open();
     },
     templateSelector: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.templateSelector
@@ -837,27 +1084,9 @@ var profilePopup = new _components_PopupWithForm_js__WEBPACK_IMPORTED_MODULE_7__
   popup: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.profilePopupElement,
   submitFormCallback: function submitFormCallback(evt) {
     evt.preventDefault();
-    fetch('https://mesto.nomoreparties.co/v1/cohort36/users/me', {
-      method: 'PATCH',
-      headers: {
-        authorization: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.token,
-        'Content-Type': 'application/json; charset=UTF-8'
-      },
-      body: JSON.stringify({
-        name: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.nameInput.value,
-        about: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.jobInput.value
-      })
-    }).then(function (res) {
-      if (res.ok) {
-        return res.json();
-      }
-
-      return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
-    }).then(function (res) {
-      userInformation.setUserInfo({
-        name: res.name,
-        job: res.about
-      });
+    api.setUserinfo({
+      name: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.nameInput.value,
+      about: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.jobInput.value
     });
     profilePopup.close();
   }
@@ -867,36 +1096,16 @@ var addCardPopup = new _components_PopupWithForm_js__WEBPACK_IMPORTED_MODULE_7__
   submitFormCallback: function submitFormCallback(evt) {
     evt.preventDefault();
     var newCardData = addCardPopup.getInputValues();
-    fetch('https://mesto.nomoreparties.co/v1/cohort36/cards', {
-      method: 'POST',
-      headers: {
-        authorization: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.token,
-        'Content-Type': 'application/json; charset=UTF-8'
-      },
-      body: JSON.stringify({
-        name: newCardData.name,
-        link: newCardData.link
-      })
-    }).then(function (res) {
-      if (res.ok) {
-        return res.json();
-      }
-
-      return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
-    }).then(function (res) {
-      var newCard = createNewCard(res);
-      cardsContainer.addItem(newCard, 'start');
+    api.addCard({
+      name: newCardData.name,
+      link: newCardData.link
     });
     addFormValidator.disableButton(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.addSubmitBtn, _components_selectorsConfig_js__WEBPACK_IMPORTED_MODULE_2__.selectorsConfig.inactiveButtonClass);
     addCardPopup.close();
   }
 });
-var delCardPopup = new _components_PopupWithForm_js__WEBPACK_IMPORTED_MODULE_7__["default"]({
-  popup: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.delCardPopupElement,
-  submitFormCallback: function submitFormCallback(evt) {
-    evt.preventDefault();
-    console.log();
-  }
+var delCardPopup = new _components_PopupWithConfirmation_js__WEBPACK_IMPORTED_MODULE_9__["default"]({
+  popup: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.delCardPopupElement
 });
 var editFormValidator = new _components_FormValidator_js__WEBPACK_IMPORTED_MODULE_3__["default"](_components_selectorsConfig_js__WEBPACK_IMPORTED_MODULE_2__.selectorsConfig, _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.editFormElementSelector);
 editFormValidator.enableValidation();
@@ -905,25 +1114,8 @@ addFormValidator.enableValidation();
 profilePopup.setEventListeners();
 addCardPopup.setEventListeners();
 delCardPopup.setEventListeners();
-
-function renderInitialCards() {
-  fetch('https://nomoreparties.co/v1/cohort36/cards', {
-    headers: {
-      authorization: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.token,
-      'Content-Type': 'application/json; charset=UTF-8'
-    }
-  }).then(function (res) {
-    if (res.ok) {
-      return res.json();
-    }
-
-    return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
-  }).then(function (res) {
-    cardsContainer.renderItems(res);
-  });
-}
-
-window.onload = renderInitialCards();
+window.onload = api.getInitialCards();
+window.onload = api.getUserInfo();
 _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.editBtn.addEventListener('click', function () {
   editFormValidator.activateButton(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.editSubmitBtn, _components_selectorsConfig_js__WEBPACK_IMPORTED_MODULE_2__.selectorsConfig.inactiveButtonClass);
   editFormValidator.hideErrorMessage();
