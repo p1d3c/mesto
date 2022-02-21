@@ -36,7 +36,7 @@ export default class Card {
     return this._elementCard;
   }
 
-  _delCard() {
+  delCard() {
     this._elementCard.remove();
     this._elementCard = null;
     this._delBtn = null;
@@ -49,7 +49,7 @@ export default class Card {
   }
 
   _setEventListeners() {
-    this._delBtn.addEventListener('click', () => this._delCallback());
+    this._delBtn.addEventListener('click', (evt) => this._delCallback(evt));
     this._likeBtn.addEventListener('click', () => this._likeCard());
     this._img.addEventListener('click', () => this._imgCallback());
   }

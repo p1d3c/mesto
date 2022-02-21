@@ -19,7 +19,7 @@ constructor({ popup }) {
     }
   }
 
-  _setEventListeners() {
+  setEventListeners() {
     this._closeBtn.addEventListener('click', () => this.close());
 
     this._popupOverlay.addEventListener('click', () => this.close());

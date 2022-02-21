@@ -24,25 +24,29 @@ import Section from '../components/Section.js';
 import UserInfo from '../components/UserInfo.js';
 import PopupWithForm from '../components/PopupWithForm.js';
 import PopupWithImage from '../components/PopupWithImage.js';
+import PopupWithConfirmation from '../components/PopupWithConfirmation.js';
+import Api from '../components/Api';
 
-fetch('https://nomoreparties.co/v1/cohort36/users/me', {
+const api = new Api({
+  baseUrl: 'https://nomoreparties.co/v1/cohort36',
   headers: {
     authorization: token,
     'Content-Type': 'application/json; charset=UTF-8'
-  }
-})
-  .then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-
-    return Promise.reject(`Ошибка: ${res.status}`);
-})
-  .then ((res) => {
+  },
+  renderCardsCallback: (items) => {
+    cardsContainer.renderItems(items)
+  },
+  setUserInfoCallback: (res) => {
     userInformation.setUserInfo({
       name: res.name,
-      job: res.about })
-});
+      job: res.about
+    })
+  },
+  addNewCardCallback: (res) => {
+    const newCard = createNewCard(res);
+    cardsContainer.addItem(newCard, 'start');
+  }
+})
 
 const userInformation = new UserInfo({
   nameSelector: profNameSelector,
@@ -60,6 +64,12 @@ function createNewCard(item) {
       openedImg.open(item);
     },
     handleDelClick: () => {
+      delCardPopup.setSubmitAction((evt) => {
+        evt.preventDefault();
+        api.delCard(item._id);
+        card.delCard();
+        delCardPopup.close();
+      })
       delCardPopup.open();
     },
     templateSelector
@@ -89,28 +99,9 @@ const profilePopup = new PopupWithForm({
   submitFormCallback: (evt) => {
     evt.preventDefault();
 
-    fetch('https://mesto.nomoreparties.co/v1/cohort36/users/me', {
-      method: 'PATCH',
-      headers: {
-        authorization: token,
-        'Content-Type': 'application/json; charset=UTF-8'
-      },
-      body: JSON.stringify({
-        name: nameInput.value,
-        about: jobInput.value
-      })
-    })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-
-      return Promise.reject(`Ошибка: ${res.status}`)
-    })
-    .then((res) => {
-      userInformation.setUserInfo({
-        name: res.name,
-        job: res.about })
+    api.setUserinfo({
+      name: nameInput.value,
+      about: jobInput.value
     })
 
     profilePopup.close();
@@ -122,28 +113,10 @@ const addCardPopup = new PopupWithForm({
   submitFormCallback: (evt) => {
     evt.preventDefault();
     const newCardData = addCardPopup.getInputValues();
-    fetch('https://mesto.nomoreparties.co/v1/cohort36/cards', {
-      method: 'POST',
-      headers: {
-        authorization: token,
-        'Content-Type': 'application/json; charset=UTF-8'
-      },
-      body: JSON.stringify({
-        name: newCardData.name,
-        link: newCardData.link
-      })
-    })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-
-      return Promise.reject(`Ошибка: ${res.status}`)
-    })
-    .then((res) => {
-      const newCard = createNewCard(res);
-      cardsContainer.addItem(newCard, 'start');
-    })
+    api.addCard({
+      name: newCardData.name,
+      link: newCardData.link
+    });
     addFormValidator.disableButton(
       addSubmitBtn,
       selectorsConfig.inactiveButtonClass);
@@ -151,12 +124,8 @@ const addCardPopup = new PopupWithForm({
   }
 });
 
-const delCardPopup = new PopupWithForm({
-  popup: delCardPopupElement,
-  submitFormCallback: (evt) => {
-    evt.preventDefault();
-    console.log()
-  }
+const delCardPopup = new PopupWithConfirmation({
+  popup: delCardPopupElement
 })
 
 const editFormValidator = new FormValidator(
@@ -175,26 +144,8 @@ profilePopup.setEventListeners();
 addCardPopup.setEventListeners();
 delCardPopup.setEventListeners();
 
-function renderInitialCards() {
-  fetch('https://nomoreparties.co/v1/cohort36/cards', {
-    headers: {
-      authorization: token,
-      'Content-Type': 'application/json; charset=UTF-8'
-    }
-  })
-    .then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-
-    return Promise.reject(`Ошибка: ${res.status}`);
-  })
-  .then((res) => {
-    cardsContainer.renderItems(res);
-  })
-}
-
-window.onload = renderInitialCards();
+window.onload = api.getInitialCards();
+window.onload = api.getUserInfo();
 
 editBtn.addEventListener('click', () => {
   editFormValidator.activateButton(
