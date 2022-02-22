@@ -1,9 +1,11 @@
 import { ownerId } from "../utils/utils";
 
 export default class Card {
-  constructor({ data, handleImgClick, handleDelClick, templateSelector }) {
+  constructor({ data, handleImgClick, handleDelClick, handleLike, handleDislike, templateSelector }) {
     this._imgCallback = handleImgClick;
     this._delCallback = handleDelClick;
+    this._likeCallback = handleLike;
+    this._dislikeCallback = handleDislike;
     this._name = data.name;
     this._link = data.link;
     this._alt = data.name;
@@ -44,13 +46,22 @@ export default class Card {
     this._img = null;
   }
 
-  _likeCard() {
+  changeBtnView(res) {
     this._likeBtn.classList.toggle('element__heart_active');
+    this._likesCount.textContent = res.likes.length;
+  }
+
+  likeCard = () => {
+    if (this._likeBtn.classList.contains('element__heart_active')) {
+      this._dislikeCallback();
+    } else {
+      this._likeCallback();
+    }
   }
 
   _setEventListeners() {
     this._delBtn.addEventListener('click', (evt) => this._delCallback(evt));
-    this._likeBtn.addEventListener('click', () => this._likeCard());
+    this._likeBtn.addEventListener('click', this.likeCard);
     this._img.addEventListener('click', () => this._imgCallback());
   }
 
@@ -58,6 +69,12 @@ export default class Card {
     if (this._data.owner._id != ownerId) {
       this._delBtn.style.display = 'none';
     }
+
+    this._data.likes.forEach((userLike) => {
+      if (userLike._id === ownerId) {
+        this._likeBtn.classList.toggle('element__heart_active');
+      }
+    })
   }
 }
 

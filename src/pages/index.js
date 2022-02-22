@@ -28,7 +28,7 @@ import PopupWithConfirmation from '../components/PopupWithConfirmation.js';
 import Api from '../components/Api';
 
 const api = new Api({
-  baseUrl: 'https://nomoreparties.co/v1/cohort36',
+  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort36',
   headers: {
     authorization: token,
     'Content-Type': 'application/json; charset=UTF-8'
@@ -71,6 +71,22 @@ function createNewCard(item) {
         delCardPopup.close();
       })
       delCardPopup.open();
+    },
+    handleLike: () => {
+      api.likeCard({
+        cardId: item._id,
+        changeLikeBtnView: (res) => {
+          card.changeBtnView(res);
+        }
+      })
+    },
+    handleDislike: () => {
+      api.dislikeCard({
+        cardId: item._id,
+        changeLikeBtnView: (res) => {
+          card.changeBtnView(res);
+        }
+      })
     },
     templateSelector
   });

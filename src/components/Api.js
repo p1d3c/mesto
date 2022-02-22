@@ -2,7 +2,6 @@ import { token } from '../utils/utils';
 
 export default class Api {
   constructor({ baseUrl, headers, renderCardsCallback, setUserInfoCallback, addNewCardCallback }) {
-    this._cardsContainer = [];
     this._baseUrl = baseUrl;
     this._headers = headers;
     this._renderCardsCallback = renderCardsCallback;
@@ -22,16 +21,12 @@ export default class Api {
     return Promise.reject(`Ошибка: ${res.status}`);
     })
     .then((res) => {
-      this._cardsContainer = res;
-    })
-    .then(() => {
-      console.log(this._cardsContainer)
-      this._renderInitialCards();
+      this._renderInitialCards(res);
     })
   }
 
-  _renderInitialCards() {
-    this._renderCardsCallback(this._cardsContainer);
+  _renderInitialCards(items) {
+    this._renderCardsCallback(items);
   }
 
   getUserInfo() {
@@ -86,11 +81,6 @@ export default class Api {
     })
     .then((res) => {
       this._addNewCardCallback(res);
-      console.log(res)
-      this._cardsContainer.unshift(res);
-    })
-    .then(() => {
-      console.log(this._cardsContainer)
     })
   }
 
@@ -105,6 +95,44 @@ export default class Api {
       }
 
       return Promise.reject(`Ошибка: ${res.status}`);
+    })
+  }
+
+  likeCard({ cardId, changeLikeBtnView }) {
+    fetch(this._baseUrl + `/cards/${cardId}/likes`, {
+      method: 'PUT',
+      headers: this._headers
+    })
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .then((res) => {
+      changeLikeBtnView(res);
+    })
+  }
+
+  dislikeCard({ cardId, changeLikeBtnView }) {
+    fetch(this._baseUrl + `/cards/${cardId}/likes`, {
+      method: 'DELETE',
+      headers: this._headers
+    })
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .then((res) => {
+      changeLikeBtnView(res);
+    })
+    .catch((err) => {
+      console.log(cardId)
+      console.log(err);
     })
   }
 }
