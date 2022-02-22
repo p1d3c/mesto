@@ -31,7 +31,6 @@ var Api = /*#__PURE__*/function () {
 
     _classCallCheck(this, Api);
 
-    this._cardsContainer = [];
     this._baseUrl = baseUrl;
     this._headers = headers;
     this._renderCardsCallback = renderCardsCallback;
@@ -53,17 +52,13 @@ var Api = /*#__PURE__*/function () {
 
         return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
       }).then(function (res) {
-        _this._cardsContainer = res;
-      }).then(function () {
-        console.log(_this._cardsContainer);
-
-        _this._renderInitialCards();
+        _this._renderInitialCards(res);
       });
     }
   }, {
     key: "_renderInitialCards",
-    value: function _renderInitialCards() {
-      this._renderCardsCallback(this._cardsContainer);
+    value: function _renderInitialCards(items) {
+      this._renderCardsCallback(items);
     }
   }, {
     key: "getUserInfo",
@@ -128,12 +123,6 @@ var Api = /*#__PURE__*/function () {
         return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
       }).then(function (res) {
         _this4._addNewCardCallback(res);
-
-        console.log(res);
-
-        _this4._cardsContainer.unshift(res);
-      }).then(function () {
-        console.log(_this4._cardsContainer);
       });
     }
   }, {
@@ -148,6 +137,45 @@ var Api = /*#__PURE__*/function () {
         }
 
         return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
+      });
+    }
+  }, {
+    key: "likeCard",
+    value: function likeCard(_ref4) {
+      var cardId = _ref4.cardId,
+          changeLikeBtnView = _ref4.changeLikeBtnView;
+      fetch(this._baseUrl + "/cards/".concat(cardId, "/likes"), {
+        method: 'PUT',
+        headers: this._headers
+      }).then(function (res) {
+        if (res.ok) {
+          return res.json();
+        }
+
+        return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
+      }).then(function (res) {
+        changeLikeBtnView(res);
+      });
+    }
+  }, {
+    key: "dislikeCard",
+    value: function dislikeCard(_ref5) {
+      var cardId = _ref5.cardId,
+          changeLikeBtnView = _ref5.changeLikeBtnView;
+      fetch(this._baseUrl + "/cards/".concat(cardId, "/likes"), {
+        method: 'DELETE',
+        headers: this._headers
+      }).then(function (res) {
+        if (res.ok) {
+          return res.json();
+        }
+
+        return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
+      }).then(function (res) {
+        changeLikeBtnView(res);
+      }).catch(function (err) {
+        console.log(cardId);
+        console.log(err);
       });
     }
   }]);
@@ -176,19 +204,35 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 var Card = /*#__PURE__*/function () {
   function Card(_ref) {
+    var _this = this;
+
     var data = _ref.data,
         handleImgClick = _ref.handleImgClick,
         handleDelClick = _ref.handleDelClick,
+        handleLike = _ref.handleLike,
+        handleDislike = _ref.handleDislike,
         templateSelector = _ref.templateSelector;
 
     _classCallCheck(this, Card);
 
+    _defineProperty(this, "likeCard", function () {
+      if (_this._likeBtn.classList.contains('element__heart_active')) {
+        _this._dislikeCallback();
+      } else {
+        _this._likeCallback();
+      }
+    });
+
     this._imgCallback = handleImgClick;
     this._delCallback = handleDelClick;
+    this._likeCallback = handleLike;
+    this._dislikeCallback = handleDislike;
     this._name = data.name;
     this._link = data.link;
     this._alt = data.name;
@@ -227,33 +271,41 @@ var Card = /*#__PURE__*/function () {
       this._img = null;
     }
   }, {
-    key: "_likeCard",
-    value: function _likeCard() {
+    key: "changeBtnView",
+    value: function changeBtnView(res) {
       this._likeBtn.classList.toggle('element__heart_active');
+
+      this._likesCount.textContent = res.likes.length;
     }
   }, {
     key: "_setEventListeners",
     value: function _setEventListeners() {
-      var _this = this;
+      var _this2 = this;
 
       this._delBtn.addEventListener('click', function (evt) {
-        return _this._delCallback(evt);
+        return _this2._delCallback(evt);
       });
 
-      this._likeBtn.addEventListener('click', function () {
-        return _this._likeCard();
-      });
+      this._likeBtn.addEventListener('click', this.likeCard);
 
       this._img.addEventListener('click', function () {
-        return _this._imgCallback();
+        return _this2._imgCallback();
       });
     }
   }, {
     key: "_isOwner",
     value: function _isOwner() {
+      var _this3 = this;
+
       if (this._data.owner._id != _utils_utils__WEBPACK_IMPORTED_MODULE_0__.ownerId) {
         this._delBtn.style.display = 'none';
       }
+
+      this._data.likes.forEach(function (userLike) {
+        if (userLike._id === _utils_utils__WEBPACK_IMPORTED_MODULE_0__.ownerId) {
+          _this3._likeBtn.classList.toggle('element__heart_active');
+        }
+      });
     }
   }]);
 
@@ -1020,7 +1072,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var api = new _components_Api__WEBPACK_IMPORTED_MODULE_10__["default"]({
-  baseUrl: 'https://nomoreparties.co/v1/cohort36',
+  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort36',
   headers: {
     authorization: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.token,
     'Content-Type': 'application/json; charset=UTF-8'
@@ -1061,6 +1113,22 @@ function createNewCard(item) {
         delCardPopup.close();
       });
       delCardPopup.open();
+    },
+    handleLike: function handleLike() {
+      api.likeCard({
+        cardId: item._id,
+        changeLikeBtnView: function changeLikeBtnView(res) {
+          card.changeBtnView(res);
+        }
+      });
+    },
+    handleDislike: function handleDislike() {
+      api.dislikeCard({
+        cardId: item._id,
+        changeLikeBtnView: function changeLikeBtnView(res) {
+          card.changeBtnView(res);
+        }
+      });
     },
     templateSelector: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.templateSelector
   });
