@@ -12,14 +12,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Api)
 /* harmony export */ });
-/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/utils */ "./src/utils/utils.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-
 
 var Api = /*#__PURE__*/function () {
   function Api(_ref) {
@@ -62,7 +59,7 @@ var Api = /*#__PURE__*/function () {
     }
   }, {
     key: "getUserInfo",
-    value: function getUserInfo() {
+    value: function getUserInfo(avatarImg) {
       var _this2 = this;
 
       fetch(this._baseUrl + '/users/me', {
@@ -74,6 +71,8 @@ var Api = /*#__PURE__*/function () {
 
         return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
       }).then(function (res) {
+        avatarImg.src = res.avatar;
+
         _this2._setUserInfoCallback(res);
       });
     }
@@ -175,6 +174,27 @@ var Api = /*#__PURE__*/function () {
         changeLikeBtnView(res);
       }).catch(function (err) {
         console.log(cardId);
+        console.log(err);
+      });
+    }
+  }, {
+    key: "changeAvatar",
+    value: function changeAvatar(avatarPopupInputValue, avatarImg) {
+      fetch(this._baseUrl + "/users/me/avatar", {
+        method: 'PATCH',
+        headers: this._headers,
+        body: JSON.stringify({
+          avatar: avatarPopupInputValue.avatar
+        })
+      }).then(function (res) {
+        if (res.ok) {
+          return res.json();
+        }
+
+        return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
+      }).then(function () {
+        avatarImg.src = avatarPopupInputValue.avatar;
+      }).catch(function (err) {
         console.log(err);
       });
     }
@@ -930,10 +950,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "ownerId": () => (/* binding */ ownerId),
 /* harmony export */   "editBtn": () => (/* binding */ editBtn),
 /* harmony export */   "addBtn": () => (/* binding */ addBtn),
+/* harmony export */   "avatarBtn": () => (/* binding */ avatarBtn),
 /* harmony export */   "profilePopupElement": () => (/* binding */ profilePopupElement),
 /* harmony export */   "addCardPopupElement": () => (/* binding */ addCardPopupElement),
 /* harmony export */   "imgPopupElement": () => (/* binding */ imgPopupElement),
 /* harmony export */   "delCardPopupElement": () => (/* binding */ delCardPopupElement),
+/* harmony export */   "avatarPopupElement": () => (/* binding */ avatarPopupElement),
 /* harmony export */   "profNameSelector": () => (/* binding */ profNameSelector),
 /* harmony export */   "profJobSelector": () => (/* binding */ profJobSelector),
 /* harmony export */   "profilePopupName": () => (/* binding */ profilePopupName),
@@ -946,6 +968,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "addSubmitBtn": () => (/* binding */ addSubmitBtn),
 /* harmony export */   "titleInput": () => (/* binding */ titleInput),
 /* harmony export */   "linkInput": () => (/* binding */ linkInput),
+/* harmony export */   "avatarFormElementSelector": () => (/* binding */ avatarFormElementSelector),
+/* harmony export */   "avatarImg": () => (/* binding */ avatarImg),
 /* harmony export */   "cardListSelector": () => (/* binding */ cardListSelector),
 /* harmony export */   "templateSelector": () => (/* binding */ templateSelector)
 /* harmony export */ });
@@ -953,10 +977,12 @@ var token = '1fc6d210-8890-4051-a715-d0338c476cfd';
 var ownerId = 'dfde4bcda101257a7e2cdc57';
 var editBtn = document.querySelector('.profile__edit-btn');
 var addBtn = document.querySelector('.profile__add-btn');
+var avatarBtn = document.querySelector('.profile__edit-pen');
 var profilePopupElement = document.querySelector('.popup_type_edit');
 var addCardPopupElement = document.querySelector('.popup_type_add');
 var imgPopupElement = document.querySelector('.popup_type_img');
 var delCardPopupElement = document.querySelector('.popup_type_del-confirm');
+var avatarPopupElement = document.querySelector('.popup_type_avatar');
 var profNameSelector = '.profile__title';
 var profJobSelector = '.profile__subtitle';
 var profilePopupName = document.querySelector('.popup__input_type_name');
@@ -969,6 +995,8 @@ var addFormElementSelector = '.popup__form_type_add';
 var addSubmitBtn = document.querySelector('button[name="add-submit"]');
 var titleInput = document.querySelector('.popup__input_type_title');
 var linkInput = document.querySelector('.popup__input_type_image');
+var avatarFormElementSelector = '.popup__form_type_avatar';
+var avatarImg = document.querySelector('.profile__avatar');
 var cardListSelector = '.elements';
 var templateSelector = '#temp';
 
@@ -1175,15 +1203,28 @@ var addCardPopup = new _components_PopupWithForm_js__WEBPACK_IMPORTED_MODULE_7__
 var delCardPopup = new _components_PopupWithConfirmation_js__WEBPACK_IMPORTED_MODULE_9__["default"]({
   popup: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.delCardPopupElement
 });
+var avatarPopup = new _components_PopupWithForm_js__WEBPACK_IMPORTED_MODULE_7__["default"]({
+  popup: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.avatarPopupElement,
+  submitFormCallback: function submitFormCallback(evt) {
+    evt.preventDefault();
+    var avatarPopupInputValue = avatarPopup.getInputValues();
+    console.log(avatarPopupInputValue);
+    api.changeAvatar(avatarPopupInputValue, _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.avatarImg);
+    avatarPopup.close();
+  }
+});
 var editFormValidator = new _components_FormValidator_js__WEBPACK_IMPORTED_MODULE_3__["default"](_components_selectorsConfig_js__WEBPACK_IMPORTED_MODULE_2__.selectorsConfig, _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.editFormElementSelector);
 editFormValidator.enableValidation();
 var addFormValidator = new _components_FormValidator_js__WEBPACK_IMPORTED_MODULE_3__["default"](_components_selectorsConfig_js__WEBPACK_IMPORTED_MODULE_2__.selectorsConfig, _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.addFormElementSelector);
 addFormValidator.enableValidation();
+var avatarFormValidator = new _components_FormValidator_js__WEBPACK_IMPORTED_MODULE_3__["default"](_components_selectorsConfig_js__WEBPACK_IMPORTED_MODULE_2__.selectorsConfig, _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.avatarFormElementSelector);
+avatarFormValidator.enableValidation();
 profilePopup.setEventListeners();
 addCardPopup.setEventListeners();
 delCardPopup.setEventListeners();
-window.onload = api.getInitialCards();
-window.onload = api.getUserInfo();
+avatarPopup.setEventListeners();
+api.getInitialCards();
+api.getUserInfo(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.avatarImg);
 _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.editBtn.addEventListener('click', function () {
   editFormValidator.activateButton(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.editSubmitBtn, _components_selectorsConfig_js__WEBPACK_IMPORTED_MODULE_2__.selectorsConfig.inactiveButtonClass);
   editFormValidator.hideErrorMessage();
@@ -1193,6 +1234,11 @@ _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.editBtn.addEventListener('click', f
 _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.addBtn.addEventListener('click', function () {
   addFormValidator.hideErrorMessage();
   addCardPopup.open();
+});
+_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.avatarBtn.addEventListener('click', function () {
+  avatarFormValidator.hideErrorMessage();
+  avatarFormValidator.disableButton();
+  avatarPopup.open();
 });
 })();
 

@@ -15,7 +15,8 @@
 
   <main>
     <section class="profile">
-      <img src="727b5baa123f981bf5e0.png" alt="аватар" class="profile__avatar">
+      <img src="#" alt="аватар" class="profile__avatar">
+      <div class="profile__edit-pen"></div>
       <div class="profile__info">
         <div class="profile__row">
           <h1 class="profile__title"></h1>
@@ -102,6 +103,23 @@
       <form class="popup__form popup__form_type_del-confirm" name="del-confirm_form" novalidate>
         <button type="submit" class="popup__submit" name="edit-submit">Да</button>
         <button class="popup__close-btn" type="button" name="edit-close"></button>
+      </form>
+    </div>
+  </section>
+
+  <section class="popup popup_type_avatar">
+    <div class="popup__overlay"></div>
+    <div class="popup__inner">
+      <h2 class="popup__title">Обновить аватар</h2>
+      <form class="popup__form popup__form_type_avatar" name="avatar-form" novalidate>
+        <fieldset class="popup__form-set">
+          <label class="popup__form-field">
+            <input id="avatar-input" type="url" class="popup__input popup__input_type_avatar" name="avatar" placeholder="Ссылка" required>
+            <span class="popup__input-error avatar-input-error"></span>
+          </label>
+          <button type="submit" class="popup__submit" name="edit-submit">Сохранить</button>
+          <button class="popup__close-btn" type="button" name="edit-close"></button>
+        </fieldset>
       </form>
     </div>
   </section>
