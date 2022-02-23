@@ -1,5 +1,3 @@
-import { token } from '../utils/utils';
-
 export default class Api {
   constructor({ baseUrl, headers, renderCardsCallback, setUserInfoCallback, addNewCardCallback }) {
     this._baseUrl = baseUrl;
@@ -29,7 +27,7 @@ export default class Api {
     this._renderCardsCallback(items);
   }
 
-  getUserInfo() {
+  getUserInfo(avatarImg) {
     fetch(this._baseUrl + '/users/me', {
       headers: this._headers
     })
@@ -41,6 +39,7 @@ export default class Api {
       return Promise.reject(`Ошибка: ${res.status}`);
     })
     .then ((res) => {
+      avatarImg.src = res.avatar;
       this._setUserInfoCallback(res);
     });
   }
@@ -132,6 +131,29 @@ export default class Api {
     })
     .catch((err) => {
       console.log(cardId)
+      console.log(err);
+    })
+  }
+
+  changeAvatar(avatarPopupInputValue, avatarImg) {
+    fetch(this._baseUrl + `/users/me/avatar`, {
+      method: 'PATCH',
+      headers: this._headers,
+      body: JSON.stringify({
+        avatar: avatarPopupInputValue.avatar
+      })
+    })
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .then(() => {
+      avatarImg.src = avatarPopupInputValue.avatar;
+    })
+    .catch((err) => {
       console.log(err);
     })
   }

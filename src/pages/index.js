@@ -4,10 +4,12 @@ import { selectorsConfig } from '../components/selectorsConfig.js';
 import FormValidator from '../components/FormValidator.js';
 import { editBtn,
   addBtn,
+  avatarBtn,
   profilePopupElement,
   addCardPopupElement,
   imgPopupElement,
   delCardPopupElement,
+  avatarPopupElement,
   profNameSelector,
   profJobSelector,
   nameInput,
@@ -16,6 +18,8 @@ import { editBtn,
   editSubmitBtn,
   addFormElementSelector,
   addSubmitBtn,
+  avatarFormElementSelector,
+  avatarImg,
   cardListSelector,
   templateSelector,
   token
@@ -144,6 +148,17 @@ const delCardPopup = new PopupWithConfirmation({
   popup: delCardPopupElement
 })
 
+const avatarPopup = new PopupWithForm({
+  popup: avatarPopupElement,
+  submitFormCallback: (evt) => {
+    evt.preventDefault();
+    const avatarPopupInputValue = avatarPopup.getInputValues();
+    console.log(avatarPopupInputValue)
+    api.changeAvatar(avatarPopupInputValue, avatarImg);
+    avatarPopup.close();
+  }
+})
+
 const editFormValidator = new FormValidator(
   selectorsConfig,
   editFormElementSelector
@@ -156,12 +171,19 @@ const addFormValidator = new FormValidator(
 );
 addFormValidator.enableValidation();
 
+const avatarFormValidator = new FormValidator(
+  selectorsConfig,
+  avatarFormElementSelector
+)
+avatarFormValidator.enableValidation();
+
 profilePopup.setEventListeners();
 addCardPopup.setEventListeners();
 delCardPopup.setEventListeners();
+avatarPopup.setEventListeners();
 
-window.onload = api.getInitialCards();
-window.onload = api.getUserInfo();
+api.getInitialCards();
+api.getUserInfo(avatarImg);
 
 editBtn.addEventListener('click', () => {
   editFormValidator.activateButton(
@@ -177,3 +199,8 @@ addBtn.addEventListener('click', () => {
   addCardPopup.open();
 });
 
+avatarBtn.addEventListener('click', () => {
+  avatarFormValidator.hideErrorMessage();
+  avatarFormValidator.disableButton();
+  avatarPopup.open();
+})
