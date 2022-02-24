@@ -1,5 +1,4 @@
 export const token = '1fc6d210-8890-4051-a715-d0338c476cfd';
-export const ownerId = 'dfde4bcda101257a7e2cdc57';
 
 export const editBtn = document.querySelector('.profile__edit-btn');
 export const addBtn = document.querySelector('.profile__add-btn');
@@ -13,6 +12,7 @@ export const avatarPopupElement = document.querySelector('.popup_type_avatar');
 
 export const profNameSelector = '.profile__title';
 export const profJobSelector = '.profile__subtitle';
+export const profAvatarSelector = '.profile__avatar';
 export const profilePopupName = document.querySelector('.popup__input_type_name');
 export const profilePopupJob = document.querySelector('.popup__input_type_job');
 
@@ -29,7 +29,6 @@ export const linkInput = document.querySelector('.popup__input_type_image');
 export const delConfirmSubmitBtn = document.querySelector('button[name="del-confirm-submit"]');
 
 export const avatarFormElementSelector = '.popup__form_type_avatar';
-export const avatarImg = document.querySelector('.profile__avatar');
 export const avatarSubmitBtn = document.querySelector('button[name="avatar-submit"]');
 
 export const cardListSelector = '.elements';

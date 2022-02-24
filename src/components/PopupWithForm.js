@@ -21,10 +21,6 @@ export default class PopupWithForm extends Popup {
     return this._formValues;
   }
 
-  _removeEventListeners() {
-    this._submitBtn.removeEventListener('submit', this._handleSubmit);
-  }
-
   _handleSubmit = (evt) => {
     this._callback(evt);
   }

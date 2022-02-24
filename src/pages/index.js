@@ -19,13 +19,13 @@ import { editBtn,
   addFormElementSelector,
   addSubmitBtn,
   avatarFormElementSelector,
-  avatarImg,
   cardListSelector,
   templateSelector,
   token,
   renderLoadingText,
   delConfirmSubmitBtn,
-  avatarSubmitBtn
+  avatarSubmitBtn,
+  profAvatarSelector
 } from '../utils/utils.js';
 import Section from '../components/Section.js';
 import UserInfo from '../components/UserInfo.js';
@@ -34,30 +34,20 @@ import PopupWithImage from '../components/PopupWithImage.js';
 import PopupWithConfirmation from '../components/PopupWithConfirmation.js';
 import Api from '../components/Api';
 
+export let ownerId = null;
+
 const api = new Api({
   baseUrl: 'https://mesto.nomoreparties.co/v1/cohort36',
   headers: {
     authorization: token,
     'Content-Type': 'application/json; charset=UTF-8'
-  },
-  renderCardsCallback: (items) => {
-    cardsContainer.renderItems(items)
-  },
-  setUserInfoCallback: (res) => {
-    userInformation.setUserInfo({
-      name: res.name,
-      job: res.about
-    })
-  },
-  addNewCardCallback: (res) => {
-    const newCard = createNewCard(res);
-    cardsContainer.addItem(newCard, 'start');
   }
 })
 
 const userInformation = new UserInfo({
   nameSelector: profNameSelector,
   jobSelector: profJobSelector,
+  avatarSelector: profAvatarSelector
 });
 
 const openedImg = new PopupWithImage({
@@ -75,29 +65,50 @@ function createNewCard(item) {
         evt.preventDefault();
         renderLoadingText(delConfirmSubmitBtn, 'Да', 'Удаление...', true);
         api.delCard({
-          cardId: item._id,
-          popupClose: () => {
+          cardId: item._id
+        })
+          .then((res) => {
+            return api.getResponseData(res);
+          })
+          .then(() => {
+            card.delCard();
             delCardPopup.close();
-          }
-        });
-        card.delCard();
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+          .finally(() => {
+            renderLoadingText(delConfirmSubmitBtn, 'Да', 'Удаление...', false);
+        })
       })
       delCardPopup.open();
     },
     handleLike: () => {
       api.likeCard({
-        cardId: item._id,
-        changeLikeBtnView: (res) => {
+        cardId: item._id
+      })
+        .then((res) => {
+          return api.getResponseData(res);
+        })
+        .then((res) => {
           card.changeBtnView(res);
-        }
+        })
+        .catch((err) => {
+          console.log(err);
       })
     },
     handleDislike: () => {
       api.dislikeCard({
-        cardId: item._id,
-        changeLikeBtnView: (res) => {
+        cardId: item._id
+      })
+        .then((res) => {
+          return api.getResponseData(res);
+        })
+        .then((res) => {
           card.changeBtnView(res);
-        }
+        })
+        .catch((err) => {
+          console.log(err);
       })
     },
     templateSelector
@@ -127,13 +138,28 @@ const profilePopup = new PopupWithForm({
   submitFormCallback: (evt) => {
     evt.preventDefault();
     renderLoadingText(editSubmitBtn, 'Сохранить', 'Сохранение...', true);
-    api.setUserinfo({
+    api.setUserInfo({
       name: nameInput.value,
-      about: jobInput.value,
-      popupClose: () => {
-        profilePopup.close();
-      }
+      about: jobInput.value
     })
+      .then((res) => {
+        return api.getResponseData(res);
+      })
+      .then((res) => {
+        console.log(res);
+        userInformation.setUserInfo({
+          name: res.name,
+          job: res.about,
+          avatarLink: res.avatar
+        })
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        renderLoadingText(editSubmitBtn, 'Сохранить', 'Сохранение...', false);
+    })
+    profilePopup.close();
   }
 });
 
@@ -146,10 +172,21 @@ const addCardPopup = new PopupWithForm({
     api.addCard({
       name: newCardData.name,
       link: newCardData.link,
-      popupClose: () => {
-        addCardPopup.close();
-      }
-    });
+    })
+      .then((res) => {
+        return api.getResponseData(res);
+      })
+      .then((res) => {
+        const newCard = createNewCard(res);
+        cardsContainer.addItem(newCard, 'start');
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        renderLoadingText(addSubmitBtn, 'Создать', 'Сохранение...', false);
+    })
+    addCardPopup.close();
     addFormValidator.disableButton(
       addSubmitBtn,
       selectorsConfig.inactiveButtonClass);
@@ -166,13 +203,21 @@ const avatarPopup = new PopupWithForm({
     evt.preventDefault();
     renderLoadingText(avatarSubmitBtn, 'Сохранить', 'Сохранение...', true);
     const avatarPopupInputValue = avatarPopup.getInputValues();
-    api.changeAvatar({
-      avatarPopupInputValue,
-      avatarImg,
-      popupClose: () => {
+    api.changeAvatar({ avatarPopupInputValue })
+      .then((res) => {
+        return api.getResponseData(res);
+      })
+      .then((res) => {
+        console.log(res)
+        userInformation.setUserAvatar(res.avatar);
         avatarPopup.close();
-      }
-    });
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        renderLoadingText(avatarSubmitBtn, 'Сохранить', 'Сохранение...', false);
+    })
   }
 })
 
@@ -199,8 +244,33 @@ addCardPopup.setEventListeners();
 delCardPopup.setEventListeners();
 avatarPopup.setEventListeners();
 
-api.getInitialCards();
-api.getUserInfo(avatarImg);
+api.getInitialCards()
+  .then((res) => {
+    return api.getResponseData(res);
+  })
+  .then((res) => {
+    cardsContainer.renderItems(res);
+  })
+  .catch((err) => {
+    console.log(err);
+})
+
+api.getUserInfo()
+  .then((res) => {
+    return api.getResponseData(res);
+  })
+  .then ((res) => {
+    ownerId = res._id;
+    console.log(ownerId)
+    userInformation.setUserInfo({
+      name: res.name,
+      job: res.about,
+      avatarLink: res.avatar
+    })
+  })
+  .catch((err) => {
+    console.log(err);
+})
 
 editBtn.addEventListener('click', () => {
   editFormValidator.activateButton(

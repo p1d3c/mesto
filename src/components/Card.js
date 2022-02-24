@@ -1,4 +1,4 @@
-import { ownerId } from "../utils/utils";
+import { ownerId } from '../pages/index.js'
 
 export default class Card {
   constructor({ data, handleImgClick, handleDelClick, handleLike, handleDislike, templateSelector }) {

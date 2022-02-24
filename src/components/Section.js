@@ -1,4 +1,4 @@
-import { ownerId } from '../utils/utils';
+import { ownerId } from '../pages/index.js';
 
 export default class Section {
   constructor({ renderer }, containerSelector) {
