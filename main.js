@@ -12,14 +12,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Api)
 /* harmony export */ });
-/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/utils */ "./src/utils/utils.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-
 
 var Api = /*#__PURE__*/function () {
   function Api(_ref) {
@@ -39,192 +36,93 @@ var Api = /*#__PURE__*/function () {
   }
 
   _createClass(Api, [{
+    key: "getResponseData",
+    value: function getResponseData(res) {
+      if (!res.ok) {
+        return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
+      }
+
+      return res.json();
+    }
+  }, {
     key: "getInitialCards",
     value: function getInitialCards() {
-      var _this = this;
-
-      fetch(this._baseUrl + '/cards', {
+      return fetch(this._baseUrl + '/cards', {
         headers: this._headers
-      }).then(function (res) {
-        if (res.ok) {
-          return res.json();
-        }
-
-        return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
-      }).then(function (res) {
-        _this._renderCardsCallback(res);
-      }).catch(function (err) {
-        console.log(err);
       });
     }
   }, {
     key: "getUserInfo",
-    value: function getUserInfo(avatarImg) {
-      var _this2 = this;
-
-      fetch(this._baseUrl + '/users/me', {
+    value: function getUserInfo() {
+      return fetch(this._baseUrl + '/users/me', {
         headers: this._headers
-      }).then(function (res) {
-        if (res.ok) {
-          return res.json();
-        }
-
-        return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
-      }).then(function (res) {
-        avatarImg.src = res.avatar;
-
-        _this2._setUserInfoCallback(res);
-      }).catch(function (err) {
-        console.log(err);
       });
     }
   }, {
-    key: "setUserinfo",
-    value: function setUserinfo(_ref2) {
-      var _this3 = this;
-
+    key: "setUserInfo",
+    value: function setUserInfo(_ref2) {
       var name = _ref2.name,
-          about = _ref2.about,
-          popupClose = _ref2.popupClose;
-      fetch(this._baseUrl + '/users/me', {
+          about = _ref2.about;
+      return fetch(this._baseUrl + '/users/me', {
         method: 'PATCH',
         headers: this._headers,
         body: JSON.stringify({
           name: name,
           about: about
         })
-      }).then(function (res) {
-        if (res.ok) {
-          return res.json();
-        }
-
-        return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
-      }).then(function (res) {
-        _this3._setUserInfoCallback(res);
-      }).catch(function (err) {
-        console.log(err);
-      }).finally(function () {
-        popupClose();
-        (0,_utils_utils__WEBPACK_IMPORTED_MODULE_0__.renderLoadingText)(_utils_utils__WEBPACK_IMPORTED_MODULE_0__.editSubmitBtn, 'Сохранить', 'Сохранение...', false);
       });
     }
   }, {
     key: "addCard",
     value: function addCard(_ref3) {
-      var _this4 = this;
-
       var name = _ref3.name,
-          link = _ref3.link,
-          popupClose = _ref3.popupClose;
-      fetch(this._baseUrl + '/cards', {
+          link = _ref3.link;
+      return fetch(this._baseUrl + '/cards', {
         method: 'POST',
         headers: this._headers,
         body: JSON.stringify({
           name: name,
           link: link
         })
-      }).then(function (res) {
-        if (res.ok) {
-          return res.json();
-        }
-
-        return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
-      }).then(function (res) {
-        _this4._addNewCardCallback(res);
-      }).catch(function (err) {
-        console.log(err);
-      }).finally(function () {
-        popupClose();
-        (0,_utils_utils__WEBPACK_IMPORTED_MODULE_0__.renderLoadingText)(_utils_utils__WEBPACK_IMPORTED_MODULE_0__.addSubmitBtn, 'Создать', 'Сохранение...', false);
       });
     }
   }, {
     key: "delCard",
     value: function delCard(_ref4) {
-      var cardId = _ref4.cardId,
-          popupClose = _ref4.popupClose;
-      fetch(this._baseUrl + "/cards/".concat(cardId), {
+      var cardId = _ref4.cardId;
+      return fetch(this._baseUrl + "/cards/".concat(cardId), {
         method: 'DELETE',
         headers: this._headers
-      }).then(function (res) {
-        if (res.ok) {
-          return;
-        }
-
-        return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
-      }).catch(function (err) {
-        console.log(err);
-      }).finally(function () {
-        popupClose();
-        (0,_utils_utils__WEBPACK_IMPORTED_MODULE_0__.renderLoadingText)(_utils_utils__WEBPACK_IMPORTED_MODULE_0__.delConfirmSubmitBtn, 'Да', 'Удаление...', false);
       });
     }
   }, {
     key: "likeCard",
     value: function likeCard(_ref5) {
-      var cardId = _ref5.cardId,
-          changeLikeBtnView = _ref5.changeLikeBtnView;
-      fetch(this._baseUrl + "/cards/".concat(cardId, "/likes"), {
+      var cardId = _ref5.cardId;
+      return fetch(this._baseUrl + "/cards/".concat(cardId, "/likes"), {
         method: 'PUT',
         headers: this._headers
-      }).then(function (res) {
-        if (res.ok) {
-          return res.json();
-        }
-
-        return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
-      }).then(function (res) {
-        changeLikeBtnView(res);
-      }).catch(function (err) {
-        console.log(err);
       });
     }
   }, {
     key: "dislikeCard",
     value: function dislikeCard(_ref6) {
-      var cardId = _ref6.cardId,
-          changeLikeBtnView = _ref6.changeLikeBtnView;
-      fetch(this._baseUrl + "/cards/".concat(cardId, "/likes"), {
+      var cardId = _ref6.cardId;
+      return fetch(this._baseUrl + "/cards/".concat(cardId, "/likes"), {
         method: 'DELETE',
         headers: this._headers
-      }).then(function (res) {
-        if (res.ok) {
-          return res.json();
-        }
-
-        return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
-      }).then(function (res) {
-        changeLikeBtnView(res);
-      }).catch(function (err) {
-        console.log(cardId);
-        console.log(err);
       });
     }
   }, {
     key: "changeAvatar",
     value: function changeAvatar(_ref7) {
-      var avatarPopupInputValue = _ref7.avatarPopupInputValue,
-          avatarImg = _ref7.avatarImg,
-          popupClose = _ref7.popupClose;
-      fetch(this._baseUrl + "/users/me/avatar", {
+      var avatarPopupInputValue = _ref7.avatarPopupInputValue;
+      return fetch(this._baseUrl + "/users/me/avatar", {
         method: 'PATCH',
         headers: this._headers,
         body: JSON.stringify({
           avatar: avatarPopupInputValue.avatar
         })
-      }).then(function (res) {
-        if (res.ok) {
-          return res.json();
-        }
-
-        return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
-      }).then(function () {
-        avatarImg.src = avatarPopupInputValue.avatar;
-      }).catch(function (err) {
-        console.log(err);
-      }).finally(function () {
-        popupClose();
-        (0,_utils_utils__WEBPACK_IMPORTED_MODULE_0__.renderLoadingText)(_utils_utils__WEBPACK_IMPORTED_MODULE_0__.avatarSubmitBtn, 'Сохранить', 'Сохранение...', false);
       });
     }
   }]);
@@ -246,7 +144,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Card)
 /* harmony export */ });
-/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/utils */ "./src/utils/utils.js");
+/* harmony import */ var _pages_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../pages/index.js */ "./src/pages/index.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -346,12 +244,12 @@ var Card = /*#__PURE__*/function () {
     value: function _isOwner() {
       var _this3 = this;
 
-      if (this._data.owner._id != _utils_utils__WEBPACK_IMPORTED_MODULE_0__.ownerId) {
+      if (this._data.owner._id != _pages_index_js__WEBPACK_IMPORTED_MODULE_0__.ownerId) {
         this._delBtn.style.display = 'none';
       }
 
       this._data.likes.forEach(function (userLike) {
-        if (userLike._id === _utils_utils__WEBPACK_IMPORTED_MODULE_0__.ownerId) {
+        if (userLike._id === _pages_index_js__WEBPACK_IMPORTED_MODULE_0__.ownerId) {
           _this3._likeBtn.classList.toggle('element__heart_active');
         }
       });
@@ -535,11 +433,15 @@ var Popup = /*#__PURE__*/function () {
     key: "open",
     value: function open() {
       this._popup.classList.add('popup_opened');
+
+      document.addEventListener('keydown', this._handleEscClose);
     }
   }, {
     key: "close",
     value: function close() {
       this._popup.classList.remove('popup_opened');
+
+      document.removeEventListener('keydown', this._handleEscClose);
     }
   }, {
     key: "setEventListeners",
@@ -553,8 +455,6 @@ var Popup = /*#__PURE__*/function () {
       this._popupOverlay.addEventListener('click', function () {
         return _this2.close();
       });
-
-      document.addEventListener('keydown', this._handleEscClose);
     }
   }]);
 
@@ -728,11 +628,6 @@ var PopupWithForm = /*#__PURE__*/function (_Popup) {
       return this._formValues;
     }
   }, {
-    key: "_removeEventListeners",
-    value: function _removeEventListeners() {
-      this._submitBtn.removeEventListener('submit', this._handleSubmit);
-    }
-  }, {
     key: "setEventListeners",
     value: function setEventListeners() {
       _get(_getPrototypeOf(PopupWithForm.prototype), "setEventListeners", this).call(this);
@@ -844,7 +739,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Section)
 /* harmony export */ });
-/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/utils */ "./src/utils/utils.js");
+/* harmony import */ var _pages_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../pages/index.js */ "./src/pages/index.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -911,12 +806,14 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var UserInfo = /*#__PURE__*/function () {
   function UserInfo(_ref) {
     var nameSelector = _ref.nameSelector,
-        jobSelector = _ref.jobSelector;
+        jobSelector = _ref.jobSelector,
+        avatarSelector = _ref.avatarSelector;
 
     _classCallCheck(this, UserInfo);
 
     this._userName = document.querySelector(nameSelector);
     this._userJob = document.querySelector(jobSelector);
+    this._userAvatar = document.querySelector(avatarSelector);
   }
 
   _createClass(UserInfo, [{
@@ -931,9 +828,16 @@ var UserInfo = /*#__PURE__*/function () {
     key: "setUserInfo",
     value: function setUserInfo(_ref2) {
       var name = _ref2.name,
-          job = _ref2.job;
+          job = _ref2.job,
+          avatarLink = _ref2.avatarLink;
       this._userName.textContent = name;
       this._userJob.textContent = job;
+      this._userAvatar.src = avatarLink;
+    }
+  }, {
+    key: "setUserAvatar",
+    value: function setUserAvatar(avatarLink) {
+      this._userAvatar.src = avatarLink;
     }
   }]);
 
@@ -967,6 +871,240 @@ var selectorsConfig = {
 
 /***/ }),
 
+/***/ "./src/pages/index.js":
+/*!****************************!*\
+  !*** ./src/pages/index.js ***!
+  \****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ownerId": () => (/* binding */ ownerId)
+/* harmony export */ });
+/* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index.css */ "./src/pages/index.css");
+/* harmony import */ var _components_Card_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/Card.js */ "./src/components/Card.js");
+/* harmony import */ var _components_selectorsConfig_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/selectorsConfig.js */ "./src/components/selectorsConfig.js");
+/* harmony import */ var _components_FormValidator_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/FormValidator.js */ "./src/components/FormValidator.js");
+/* harmony import */ var _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/utils.js */ "./src/utils/utils.js");
+/* harmony import */ var _components_Section_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/Section.js */ "./src/components/Section.js");
+/* harmony import */ var _components_UserInfo_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../components/UserInfo.js */ "./src/components/UserInfo.js");
+/* harmony import */ var _components_PopupWithForm_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../components/PopupWithForm.js */ "./src/components/PopupWithForm.js");
+/* harmony import */ var _components_PopupWithImage_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../components/PopupWithImage.js */ "./src/components/PopupWithImage.js");
+/* harmony import */ var _components_PopupWithConfirmation_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../components/PopupWithConfirmation.js */ "./src/components/PopupWithConfirmation.js");
+/* harmony import */ var _components_Api__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../components/Api */ "./src/components/Api.js");
+
+
+
+
+
+
+
+
+
+
+
+var ownerId = null;
+var api = new _components_Api__WEBPACK_IMPORTED_MODULE_10__["default"]({
+  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort36',
+  headers: {
+    authorization: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.token,
+    'Content-Type': 'application/json; charset=UTF-8'
+  }
+});
+var userInformation = new _components_UserInfo_js__WEBPACK_IMPORTED_MODULE_6__["default"]({
+  nameSelector: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.profNameSelector,
+  jobSelector: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.profJobSelector,
+  avatarSelector: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.profAvatarSelector
+});
+var openedImg = new _components_PopupWithImage_js__WEBPACK_IMPORTED_MODULE_8__["default"]({
+  popup: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.imgPopupElement
+});
+
+function createNewCard(item) {
+  var card = new _components_Card_js__WEBPACK_IMPORTED_MODULE_1__["default"]({
+    data: item,
+    handleImgClick: function handleImgClick() {
+      openedImg.open(item);
+    },
+    handleDelClick: function handleDelClick() {
+      delCardPopup.setSubmitAction(function (evt) {
+        evt.preventDefault();
+        (0,_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.renderLoadingText)(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.delConfirmSubmitBtn, 'Да', 'Удаление...', true);
+        api.delCard({
+          cardId: item._id
+        }).then(function (res) {
+          return api.getResponseData(res);
+        }).then(function () {
+          card.delCard();
+          delCardPopup.close();
+        }).catch(function (err) {
+          console.log(err);
+        }).finally(function () {
+          (0,_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.renderLoadingText)(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.delConfirmSubmitBtn, 'Да', 'Удаление...', false);
+        });
+      });
+      delCardPopup.open();
+    },
+    handleLike: function handleLike() {
+      api.likeCard({
+        cardId: item._id
+      }).then(function (res) {
+        return api.getResponseData(res);
+      }).then(function (res) {
+        card.changeBtnView(res);
+      }).catch(function (err) {
+        console.log(err);
+      });
+    },
+    handleDislike: function handleDislike() {
+      api.dislikeCard({
+        cardId: item._id
+      }).then(function (res) {
+        return api.getResponseData(res);
+      }).then(function (res) {
+        card.changeBtnView(res);
+      }).catch(function (err) {
+        console.log(err);
+      });
+    },
+    templateSelector: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.templateSelector
+  });
+  var cardElement = card.createCard();
+  return cardElement;
+}
+
+function fillProfilePopupInputs() {
+  var userInfo = userInformation.getUserInfo();
+  _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.nameInput.value = userInfo.userName;
+  _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.jobInput.value = userInfo.userJob;
+}
+
+var cardsContainer = new _components_Section_js__WEBPACK_IMPORTED_MODULE_5__["default"]({
+  renderer: function renderer(item) {
+    var initialCard = createNewCard(item);
+    cardsContainer.addItem(initialCard, 'end');
+  }
+}, _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.cardListSelector);
+var profilePopup = new _components_PopupWithForm_js__WEBPACK_IMPORTED_MODULE_7__["default"]({
+  popup: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.profilePopupElement,
+  submitFormCallback: function submitFormCallback(evt) {
+    evt.preventDefault();
+    (0,_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.renderLoadingText)(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.editSubmitBtn, 'Сохранить', 'Сохранение...', true);
+    api.setUserInfo({
+      name: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.nameInput.value,
+      about: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.jobInput.value
+    }).then(function (res) {
+      return api.getResponseData(res);
+    }).then(function (res) {
+      console.log(res);
+      userInformation.setUserInfo({
+        name: res.name,
+        job: res.about,
+        avatarLink: res.avatar
+      });
+    }).catch(function (err) {
+      console.log(err);
+    }).finally(function () {
+      (0,_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.renderLoadingText)(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.editSubmitBtn, 'Сохранить', 'Сохранение...', false);
+    });
+    profilePopup.close();
+  }
+});
+var addCardPopup = new _components_PopupWithForm_js__WEBPACK_IMPORTED_MODULE_7__["default"]({
+  popup: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.addCardPopupElement,
+  submitFormCallback: function submitFormCallback(evt) {
+    evt.preventDefault();
+    (0,_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.renderLoadingText)(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.addSubmitBtn, 'Создать', 'Сохранение...', true);
+    var newCardData = addCardPopup.getInputValues();
+    api.addCard({
+      name: newCardData.name,
+      link: newCardData.link
+    }).then(function (res) {
+      return api.getResponseData(res);
+    }).then(function (res) {
+      var newCard = createNewCard(res);
+      cardsContainer.addItem(newCard, 'start');
+    }).catch(function (err) {
+      console.log(err);
+    }).finally(function () {
+      (0,_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.renderLoadingText)(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.addSubmitBtn, 'Создать', 'Сохранение...', false);
+    });
+    addCardPopup.close();
+    addFormValidator.disableButton(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.addSubmitBtn, _components_selectorsConfig_js__WEBPACK_IMPORTED_MODULE_2__.selectorsConfig.inactiveButtonClass);
+  }
+});
+var delCardPopup = new _components_PopupWithConfirmation_js__WEBPACK_IMPORTED_MODULE_9__["default"]({
+  popup: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.delCardPopupElement
+});
+var avatarPopup = new _components_PopupWithForm_js__WEBPACK_IMPORTED_MODULE_7__["default"]({
+  popup: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.avatarPopupElement,
+  submitFormCallback: function submitFormCallback(evt) {
+    evt.preventDefault();
+    (0,_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.renderLoadingText)(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.avatarSubmitBtn, 'Сохранить', 'Сохранение...', true);
+    var avatarPopupInputValue = avatarPopup.getInputValues();
+    api.changeAvatar({
+      avatarPopupInputValue: avatarPopupInputValue
+    }).then(function (res) {
+      return api.getResponseData(res);
+    }).then(function (res) {
+      console.log(res);
+      userInformation.setUserAvatar(res.avatar);
+      avatarPopup.close();
+    }).catch(function (err) {
+      console.log(err);
+    }).finally(function () {
+      (0,_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.renderLoadingText)(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.avatarSubmitBtn, 'Сохранить', 'Сохранение...', false);
+    });
+  }
+});
+var editFormValidator = new _components_FormValidator_js__WEBPACK_IMPORTED_MODULE_3__["default"](_components_selectorsConfig_js__WEBPACK_IMPORTED_MODULE_2__.selectorsConfig, _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.editFormElementSelector);
+editFormValidator.enableValidation();
+var addFormValidator = new _components_FormValidator_js__WEBPACK_IMPORTED_MODULE_3__["default"](_components_selectorsConfig_js__WEBPACK_IMPORTED_MODULE_2__.selectorsConfig, _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.addFormElementSelector);
+addFormValidator.enableValidation();
+var avatarFormValidator = new _components_FormValidator_js__WEBPACK_IMPORTED_MODULE_3__["default"](_components_selectorsConfig_js__WEBPACK_IMPORTED_MODULE_2__.selectorsConfig, _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.avatarFormElementSelector);
+avatarFormValidator.enableValidation();
+profilePopup.setEventListeners();
+addCardPopup.setEventListeners();
+delCardPopup.setEventListeners();
+avatarPopup.setEventListeners();
+api.getInitialCards().then(function (res) {
+  return api.getResponseData(res);
+}).then(function (res) {
+  cardsContainer.renderItems(res);
+}).catch(function (err) {
+  console.log(err);
+});
+api.getUserInfo().then(function (res) {
+  return api.getResponseData(res);
+}).then(function (res) {
+  ownerId = res._id;
+  console.log(ownerId);
+  userInformation.setUserInfo({
+    name: res.name,
+    job: res.about,
+    avatarLink: res.avatar
+  });
+}).catch(function (err) {
+  console.log(err);
+});
+_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.editBtn.addEventListener('click', function () {
+  editFormValidator.activateButton(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.editSubmitBtn, _components_selectorsConfig_js__WEBPACK_IMPORTED_MODULE_2__.selectorsConfig.inactiveButtonClass);
+  editFormValidator.hideErrorMessage();
+  profilePopup.open();
+  fillProfilePopupInputs();
+});
+_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.addBtn.addEventListener('click', function () {
+  addFormValidator.hideErrorMessage();
+  addCardPopup.open();
+});
+_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.avatarBtn.addEventListener('click', function () {
+  avatarFormValidator.hideErrorMessage();
+  avatarFormValidator.disableButton();
+  avatarPopup.open();
+});
+
+/***/ }),
+
 /***/ "./src/utils/utils.js":
 /*!****************************!*\
   !*** ./src/utils/utils.js ***!
@@ -976,7 +1114,6 @@ var selectorsConfig = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "token": () => (/* binding */ token),
-/* harmony export */   "ownerId": () => (/* binding */ ownerId),
 /* harmony export */   "editBtn": () => (/* binding */ editBtn),
 /* harmony export */   "addBtn": () => (/* binding */ addBtn),
 /* harmony export */   "avatarBtn": () => (/* binding */ avatarBtn),
@@ -987,6 +1124,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "avatarPopupElement": () => (/* binding */ avatarPopupElement),
 /* harmony export */   "profNameSelector": () => (/* binding */ profNameSelector),
 /* harmony export */   "profJobSelector": () => (/* binding */ profJobSelector),
+/* harmony export */   "profAvatarSelector": () => (/* binding */ profAvatarSelector),
 /* harmony export */   "profilePopupName": () => (/* binding */ profilePopupName),
 /* harmony export */   "profilePopupJob": () => (/* binding */ profilePopupJob),
 /* harmony export */   "editFormElementSelector": () => (/* binding */ editFormElementSelector),
@@ -999,14 +1137,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "linkInput": () => (/* binding */ linkInput),
 /* harmony export */   "delConfirmSubmitBtn": () => (/* binding */ delConfirmSubmitBtn),
 /* harmony export */   "avatarFormElementSelector": () => (/* binding */ avatarFormElementSelector),
-/* harmony export */   "avatarImg": () => (/* binding */ avatarImg),
 /* harmony export */   "avatarSubmitBtn": () => (/* binding */ avatarSubmitBtn),
 /* harmony export */   "cardListSelector": () => (/* binding */ cardListSelector),
 /* harmony export */   "templateSelector": () => (/* binding */ templateSelector),
 /* harmony export */   "renderLoadingText": () => (/* binding */ renderLoadingText)
 /* harmony export */ });
 var token = '1fc6d210-8890-4051-a715-d0338c476cfd';
-var ownerId = 'dfde4bcda101257a7e2cdc57';
 var editBtn = document.querySelector('.profile__edit-btn');
 var addBtn = document.querySelector('.profile__add-btn');
 var avatarBtn = document.querySelector('.profile__edit-pen');
@@ -1017,6 +1153,7 @@ var delCardPopupElement = document.querySelector('.popup_type_del-confirm');
 var avatarPopupElement = document.querySelector('.popup_type_avatar');
 var profNameSelector = '.profile__title';
 var profJobSelector = '.profile__subtitle';
+var profAvatarSelector = '.profile__avatar';
 var profilePopupName = document.querySelector('.popup__input_type_name');
 var profilePopupJob = document.querySelector('.popup__input_type_job');
 var editFormElementSelector = '.popup__form_type_edit';
@@ -1029,7 +1166,6 @@ var titleInput = document.querySelector('.popup__input_type_title');
 var linkInput = document.querySelector('.popup__input_type_image');
 var delConfirmSubmitBtn = document.querySelector('button[name="del-confirm-submit"]');
 var avatarFormElementSelector = '.popup__form_type_avatar';
-var avatarImg = document.querySelector('.profile__avatar');
 var avatarSubmitBtn = document.querySelector('button[name="avatar-submit"]');
 var cardListSelector = '.elements';
 var templateSelector = '#temp';
@@ -1112,194 +1248,12 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 	})();
 /******/ 	
 /************************************************************************/
-var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-(() => {
-/*!****************************!*\
-  !*** ./src/pages/index.js ***!
-  \****************************/
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index.css */ "./src/pages/index.css");
-/* harmony import */ var _components_Card_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/Card.js */ "./src/components/Card.js");
-/* harmony import */ var _components_selectorsConfig_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/selectorsConfig.js */ "./src/components/selectorsConfig.js");
-/* harmony import */ var _components_FormValidator_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/FormValidator.js */ "./src/components/FormValidator.js");
-/* harmony import */ var _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/utils.js */ "./src/utils/utils.js");
-/* harmony import */ var _components_Section_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/Section.js */ "./src/components/Section.js");
-/* harmony import */ var _components_UserInfo_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../components/UserInfo.js */ "./src/components/UserInfo.js");
-/* harmony import */ var _components_PopupWithForm_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../components/PopupWithForm.js */ "./src/components/PopupWithForm.js");
-/* harmony import */ var _components_PopupWithImage_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../components/PopupWithImage.js */ "./src/components/PopupWithImage.js");
-/* harmony import */ var _components_PopupWithConfirmation_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../components/PopupWithConfirmation.js */ "./src/components/PopupWithConfirmation.js");
-/* harmony import */ var _components_Api__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../components/Api */ "./src/components/Api.js");
-
-
-
-
-
-
-
-
-
-
-
-var api = new _components_Api__WEBPACK_IMPORTED_MODULE_10__["default"]({
-  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort36',
-  headers: {
-    authorization: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.token,
-    'Content-Type': 'application/json; charset=UTF-8'
-  },
-  renderCardsCallback: function renderCardsCallback(items) {
-    cardsContainer.renderItems(items);
-  },
-  setUserInfoCallback: function setUserInfoCallback(res) {
-    userInformation.setUserInfo({
-      name: res.name,
-      job: res.about
-    });
-  },
-  addNewCardCallback: function addNewCardCallback(res) {
-    var newCard = createNewCard(res);
-    cardsContainer.addItem(newCard, 'start');
-  }
-});
-var userInformation = new _components_UserInfo_js__WEBPACK_IMPORTED_MODULE_6__["default"]({
-  nameSelector: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.profNameSelector,
-  jobSelector: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.profJobSelector
-});
-var openedImg = new _components_PopupWithImage_js__WEBPACK_IMPORTED_MODULE_8__["default"]({
-  popup: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.imgPopupElement
-});
-
-function createNewCard(item) {
-  var card = new _components_Card_js__WEBPACK_IMPORTED_MODULE_1__["default"]({
-    data: item,
-    handleImgClick: function handleImgClick() {
-      openedImg.open(item);
-    },
-    handleDelClick: function handleDelClick() {
-      delCardPopup.setSubmitAction(function (evt) {
-        evt.preventDefault();
-        (0,_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.renderLoadingText)(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.delConfirmSubmitBtn, 'Да', 'Удаление...', true);
-        api.delCard({
-          cardId: item._id,
-          popupClose: function popupClose() {
-            delCardPopup.close();
-          }
-        });
-        card.delCard();
-      });
-      delCardPopup.open();
-    },
-    handleLike: function handleLike() {
-      api.likeCard({
-        cardId: item._id,
-        changeLikeBtnView: function changeLikeBtnView(res) {
-          card.changeBtnView(res);
-        }
-      });
-    },
-    handleDislike: function handleDislike() {
-      api.dislikeCard({
-        cardId: item._id,
-        changeLikeBtnView: function changeLikeBtnView(res) {
-          card.changeBtnView(res);
-        }
-      });
-    },
-    templateSelector: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.templateSelector
-  });
-  var cardElement = card.createCard();
-  return cardElement;
-}
-
-function fillProfilePopupInputs() {
-  var userInfo = userInformation.getUserInfo();
-  _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.nameInput.value = userInfo.userName;
-  _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.jobInput.value = userInfo.userJob;
-}
-
-var cardsContainer = new _components_Section_js__WEBPACK_IMPORTED_MODULE_5__["default"]({
-  renderer: function renderer(item) {
-    var initialCard = createNewCard(item);
-    cardsContainer.addItem(initialCard, 'end');
-  }
-}, _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.cardListSelector);
-var profilePopup = new _components_PopupWithForm_js__WEBPACK_IMPORTED_MODULE_7__["default"]({
-  popup: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.profilePopupElement,
-  submitFormCallback: function submitFormCallback(evt) {
-    evt.preventDefault();
-    (0,_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.renderLoadingText)(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.editSubmitBtn, 'Сохранить', 'Сохранение...', true);
-    api.setUserinfo({
-      name: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.nameInput.value,
-      about: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.jobInput.value,
-      popupClose: function popupClose() {
-        profilePopup.close();
-      }
-    });
-  }
-});
-var addCardPopup = new _components_PopupWithForm_js__WEBPACK_IMPORTED_MODULE_7__["default"]({
-  popup: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.addCardPopupElement,
-  submitFormCallback: function submitFormCallback(evt) {
-    evt.preventDefault();
-    (0,_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.renderLoadingText)(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.addSubmitBtn, 'Создать', 'Сохранение...', true);
-    var newCardData = addCardPopup.getInputValues();
-    api.addCard({
-      name: newCardData.name,
-      link: newCardData.link,
-      popupClose: function popupClose() {
-        addCardPopup.close();
-      }
-    });
-    addFormValidator.disableButton(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.addSubmitBtn, _components_selectorsConfig_js__WEBPACK_IMPORTED_MODULE_2__.selectorsConfig.inactiveButtonClass);
-  }
-});
-var delCardPopup = new _components_PopupWithConfirmation_js__WEBPACK_IMPORTED_MODULE_9__["default"]({
-  popup: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.delCardPopupElement
-});
-var avatarPopup = new _components_PopupWithForm_js__WEBPACK_IMPORTED_MODULE_7__["default"]({
-  popup: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.avatarPopupElement,
-  submitFormCallback: function submitFormCallback(evt) {
-    evt.preventDefault();
-    (0,_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.renderLoadingText)(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.avatarSubmitBtn, 'Сохранить', 'Сохранение...', true);
-    var avatarPopupInputValue = avatarPopup.getInputValues();
-    api.changeAvatar({
-      avatarPopupInputValue: avatarPopupInputValue,
-      avatarImg: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.avatarImg,
-      popupClose: function popupClose() {
-        avatarPopup.close();
-      }
-    });
-  }
-});
-var editFormValidator = new _components_FormValidator_js__WEBPACK_IMPORTED_MODULE_3__["default"](_components_selectorsConfig_js__WEBPACK_IMPORTED_MODULE_2__.selectorsConfig, _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.editFormElementSelector);
-editFormValidator.enableValidation();
-var addFormValidator = new _components_FormValidator_js__WEBPACK_IMPORTED_MODULE_3__["default"](_components_selectorsConfig_js__WEBPACK_IMPORTED_MODULE_2__.selectorsConfig, _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.addFormElementSelector);
-addFormValidator.enableValidation();
-var avatarFormValidator = new _components_FormValidator_js__WEBPACK_IMPORTED_MODULE_3__["default"](_components_selectorsConfig_js__WEBPACK_IMPORTED_MODULE_2__.selectorsConfig, _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.avatarFormElementSelector);
-avatarFormValidator.enableValidation();
-profilePopup.setEventListeners();
-addCardPopup.setEventListeners();
-delCardPopup.setEventListeners();
-avatarPopup.setEventListeners();
-api.getInitialCards();
-api.getUserInfo(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.avatarImg);
-_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.editBtn.addEventListener('click', function () {
-  editFormValidator.activateButton(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.editSubmitBtn, _components_selectorsConfig_js__WEBPACK_IMPORTED_MODULE_2__.selectorsConfig.inactiveButtonClass);
-  editFormValidator.hideErrorMessage();
-  profilePopup.open();
-  fillProfilePopupInputs();
-});
-_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.addBtn.addEventListener('click', function () {
-  addFormValidator.hideErrorMessage();
-  addCardPopup.open();
-});
-_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.avatarBtn.addEventListener('click', function () {
-  avatarFormValidator.hideErrorMessage();
-  avatarFormValidator.disableButton();
-  avatarPopup.open();
-});
-})();
-
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __webpack_require__("./src/pages/index.js");
+/******/ 	
 /******/ })()
 ;
 //# sourceMappingURL=main.js.map
