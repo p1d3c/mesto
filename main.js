@@ -12,11 +12,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Api)
 /* harmony export */ });
+/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/utils */ "./src/utils/utils.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+
 
 var Api = /*#__PURE__*/function () {
   function Api(_ref) {
@@ -49,13 +52,10 @@ var Api = /*#__PURE__*/function () {
 
         return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
       }).then(function (res) {
-        _this._renderInitialCards(res);
+        _this._renderCardsCallback(res);
+      }).catch(function (err) {
+        console.log(err);
       });
-    }
-  }, {
-    key: "_renderInitialCards",
-    value: function _renderInitialCards(items) {
-      this._renderCardsCallback(items);
     }
   }, {
     key: "getUserInfo",
@@ -74,6 +74,8 @@ var Api = /*#__PURE__*/function () {
         avatarImg.src = res.avatar;
 
         _this2._setUserInfoCallback(res);
+      }).catch(function (err) {
+        console.log(err);
       });
     }
   }, {
@@ -82,7 +84,8 @@ var Api = /*#__PURE__*/function () {
       var _this3 = this;
 
       var name = _ref2.name,
-          about = _ref2.about;
+          about = _ref2.about,
+          popupClose = _ref2.popupClose;
       fetch(this._baseUrl + '/users/me', {
         method: 'PATCH',
         headers: this._headers,
@@ -98,6 +101,11 @@ var Api = /*#__PURE__*/function () {
         return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
       }).then(function (res) {
         _this3._setUserInfoCallback(res);
+      }).catch(function (err) {
+        console.log(err);
+      }).finally(function () {
+        popupClose();
+        (0,_utils_utils__WEBPACK_IMPORTED_MODULE_0__.renderLoadingText)(_utils_utils__WEBPACK_IMPORTED_MODULE_0__.editSubmitBtn, 'Сохранить', 'Сохранение...', false);
       });
     }
   }, {
@@ -106,7 +114,8 @@ var Api = /*#__PURE__*/function () {
       var _this4 = this;
 
       var name = _ref3.name,
-          link = _ref3.link;
+          link = _ref3.link,
+          popupClose = _ref3.popupClose;
       fetch(this._baseUrl + '/cards', {
         method: 'POST',
         headers: this._headers,
@@ -122,11 +131,18 @@ var Api = /*#__PURE__*/function () {
         return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
       }).then(function (res) {
         _this4._addNewCardCallback(res);
+      }).catch(function (err) {
+        console.log(err);
+      }).finally(function () {
+        popupClose();
+        (0,_utils_utils__WEBPACK_IMPORTED_MODULE_0__.renderLoadingText)(_utils_utils__WEBPACK_IMPORTED_MODULE_0__.addSubmitBtn, 'Создать', 'Сохранение...', false);
       });
     }
   }, {
     key: "delCard",
-    value: function delCard(cardId) {
+    value: function delCard(_ref4) {
+      var cardId = _ref4.cardId,
+          popupClose = _ref4.popupClose;
       fetch(this._baseUrl + "/cards/".concat(cardId), {
         method: 'DELETE',
         headers: this._headers
@@ -136,13 +152,18 @@ var Api = /*#__PURE__*/function () {
         }
 
         return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
+      }).catch(function (err) {
+        console.log(err);
+      }).finally(function () {
+        popupClose();
+        (0,_utils_utils__WEBPACK_IMPORTED_MODULE_0__.renderLoadingText)(_utils_utils__WEBPACK_IMPORTED_MODULE_0__.delConfirmSubmitBtn, 'Да', 'Удаление...', false);
       });
     }
   }, {
     key: "likeCard",
-    value: function likeCard(_ref4) {
-      var cardId = _ref4.cardId,
-          changeLikeBtnView = _ref4.changeLikeBtnView;
+    value: function likeCard(_ref5) {
+      var cardId = _ref5.cardId,
+          changeLikeBtnView = _ref5.changeLikeBtnView;
       fetch(this._baseUrl + "/cards/".concat(cardId, "/likes"), {
         method: 'PUT',
         headers: this._headers
@@ -154,13 +175,15 @@ var Api = /*#__PURE__*/function () {
         return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
       }).then(function (res) {
         changeLikeBtnView(res);
+      }).catch(function (err) {
+        console.log(err);
       });
     }
   }, {
     key: "dislikeCard",
-    value: function dislikeCard(_ref5) {
-      var cardId = _ref5.cardId,
-          changeLikeBtnView = _ref5.changeLikeBtnView;
+    value: function dislikeCard(_ref6) {
+      var cardId = _ref6.cardId,
+          changeLikeBtnView = _ref6.changeLikeBtnView;
       fetch(this._baseUrl + "/cards/".concat(cardId, "/likes"), {
         method: 'DELETE',
         headers: this._headers
@@ -179,7 +202,10 @@ var Api = /*#__PURE__*/function () {
     }
   }, {
     key: "changeAvatar",
-    value: function changeAvatar(avatarPopupInputValue, avatarImg) {
+    value: function changeAvatar(_ref7) {
+      var avatarPopupInputValue = _ref7.avatarPopupInputValue,
+          avatarImg = _ref7.avatarImg,
+          popupClose = _ref7.popupClose;
       fetch(this._baseUrl + "/users/me/avatar", {
         method: 'PATCH',
         headers: this._headers,
@@ -196,6 +222,9 @@ var Api = /*#__PURE__*/function () {
         avatarImg.src = avatarPopupInputValue.avatar;
       }).catch(function (err) {
         console.log(err);
+      }).finally(function () {
+        popupClose();
+        (0,_utils_utils__WEBPACK_IMPORTED_MODULE_0__.renderLoadingText)(_utils_utils__WEBPACK_IMPORTED_MODULE_0__.avatarSubmitBtn, 'Сохранить', 'Сохранение...', false);
       });
     }
   }]);
@@ -968,10 +997,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "addSubmitBtn": () => (/* binding */ addSubmitBtn),
 /* harmony export */   "titleInput": () => (/* binding */ titleInput),
 /* harmony export */   "linkInput": () => (/* binding */ linkInput),
+/* harmony export */   "delConfirmSubmitBtn": () => (/* binding */ delConfirmSubmitBtn),
 /* harmony export */   "avatarFormElementSelector": () => (/* binding */ avatarFormElementSelector),
 /* harmony export */   "avatarImg": () => (/* binding */ avatarImg),
+/* harmony export */   "avatarSubmitBtn": () => (/* binding */ avatarSubmitBtn),
 /* harmony export */   "cardListSelector": () => (/* binding */ cardListSelector),
-/* harmony export */   "templateSelector": () => (/* binding */ templateSelector)
+/* harmony export */   "templateSelector": () => (/* binding */ templateSelector),
+/* harmony export */   "renderLoadingText": () => (/* binding */ renderLoadingText)
 /* harmony export */ });
 var token = '1fc6d210-8890-4051-a715-d0338c476cfd';
 var ownerId = 'dfde4bcda101257a7e2cdc57';
@@ -995,10 +1027,20 @@ var addFormElementSelector = '.popup__form_type_add';
 var addSubmitBtn = document.querySelector('button[name="add-submit"]');
 var titleInput = document.querySelector('.popup__input_type_title');
 var linkInput = document.querySelector('.popup__input_type_image');
+var delConfirmSubmitBtn = document.querySelector('button[name="del-confirm-submit"]');
 var avatarFormElementSelector = '.popup__form_type_avatar';
 var avatarImg = document.querySelector('.profile__avatar');
+var avatarSubmitBtn = document.querySelector('button[name="avatar-submit"]');
 var cardListSelector = '.elements';
 var templateSelector = '#temp';
+function renderLoadingText(button, btnTextBefore, btnTextAfter, isLoading) {
+  if (isLoading) {
+    button.textContent = btnTextAfter;
+  } else {
+    button.textContent = btnTextBefore;
+  }
+}
+;
 
 /***/ }),
 
@@ -1136,9 +1178,14 @@ function createNewCard(item) {
     handleDelClick: function handleDelClick() {
       delCardPopup.setSubmitAction(function (evt) {
         evt.preventDefault();
-        api.delCard(item._id);
+        (0,_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.renderLoadingText)(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.delConfirmSubmitBtn, 'Да', 'Удаление...', true);
+        api.delCard({
+          cardId: item._id,
+          popupClose: function popupClose() {
+            delCardPopup.close();
+          }
+        });
         card.delCard();
-        delCardPopup.close();
       });
       delCardPopup.open();
     },
@@ -1180,24 +1227,30 @@ var profilePopup = new _components_PopupWithForm_js__WEBPACK_IMPORTED_MODULE_7__
   popup: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.profilePopupElement,
   submitFormCallback: function submitFormCallback(evt) {
     evt.preventDefault();
+    (0,_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.renderLoadingText)(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.editSubmitBtn, 'Сохранить', 'Сохранение...', true);
     api.setUserinfo({
       name: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.nameInput.value,
-      about: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.jobInput.value
+      about: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.jobInput.value,
+      popupClose: function popupClose() {
+        profilePopup.close();
+      }
     });
-    profilePopup.close();
   }
 });
 var addCardPopup = new _components_PopupWithForm_js__WEBPACK_IMPORTED_MODULE_7__["default"]({
   popup: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.addCardPopupElement,
   submitFormCallback: function submitFormCallback(evt) {
     evt.preventDefault();
+    (0,_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.renderLoadingText)(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.addSubmitBtn, 'Создать', 'Сохранение...', true);
     var newCardData = addCardPopup.getInputValues();
     api.addCard({
       name: newCardData.name,
-      link: newCardData.link
+      link: newCardData.link,
+      popupClose: function popupClose() {
+        addCardPopup.close();
+      }
     });
     addFormValidator.disableButton(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.addSubmitBtn, _components_selectorsConfig_js__WEBPACK_IMPORTED_MODULE_2__.selectorsConfig.inactiveButtonClass);
-    addCardPopup.close();
   }
 });
 var delCardPopup = new _components_PopupWithConfirmation_js__WEBPACK_IMPORTED_MODULE_9__["default"]({
@@ -1207,10 +1260,15 @@ var avatarPopup = new _components_PopupWithForm_js__WEBPACK_IMPORTED_MODULE_7__[
   popup: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.avatarPopupElement,
   submitFormCallback: function submitFormCallback(evt) {
     evt.preventDefault();
+    (0,_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.renderLoadingText)(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.avatarSubmitBtn, 'Сохранить', 'Сохранение...', true);
     var avatarPopupInputValue = avatarPopup.getInputValues();
-    console.log(avatarPopupInputValue);
-    api.changeAvatar(avatarPopupInputValue, _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.avatarImg);
-    avatarPopup.close();
+    api.changeAvatar({
+      avatarPopupInputValue: avatarPopupInputValue,
+      avatarImg: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.avatarImg,
+      popupClose: function popupClose() {
+        avatarPopup.close();
+      }
+    });
   }
 });
 var editFormValidator = new _components_FormValidator_js__WEBPACK_IMPORTED_MODULE_3__["default"](_components_selectorsConfig_js__WEBPACK_IMPORTED_MODULE_2__.selectorsConfig, _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.editFormElementSelector);
