@@ -261,7 +261,6 @@ api.getUserInfo()
   })
   .then ((res) => {
     ownerId = res._id;
-    console.log(ownerId)
     userInformation.setUserInfo({
       name: res.name,
       job: res.about,
