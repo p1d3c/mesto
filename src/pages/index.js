@@ -22,7 +22,10 @@ import { editBtn,
   avatarImg,
   cardListSelector,
   templateSelector,
-  token
+  token,
+  renderLoadingText,
+  delConfirmSubmitBtn,
+  avatarSubmitBtn
 } from '../utils/utils.js';
 import Section from '../components/Section.js';
 import UserInfo from '../components/UserInfo.js';
@@ -70,9 +73,14 @@ function createNewCard(item) {
     handleDelClick: () => {
       delCardPopup.setSubmitAction((evt) => {
         evt.preventDefault();
-        api.delCard(item._id);
+        renderLoadingText(delConfirmSubmitBtn, 'Да', 'Удаление...', true);
+        api.delCard({
+          cardId: item._id,
+          popupClose: () => {
+            delCardPopup.close();
+          }
+        });
         card.delCard();
-        delCardPopup.close();
       })
       delCardPopup.open();
     },
@@ -118,13 +126,14 @@ const profilePopup = new PopupWithForm({
   popup: profilePopupElement,
   submitFormCallback: (evt) => {
     evt.preventDefault();
-
+    renderLoadingText(editSubmitBtn, 'Сохранить', 'Сохранение...', true);
     api.setUserinfo({
       name: nameInput.value,
-      about: jobInput.value
+      about: jobInput.value,
+      popupClose: () => {
+        profilePopup.close();
+      }
     })
-
-    profilePopup.close();
   }
 });
 
@@ -132,15 +141,18 @@ const addCardPopup = new PopupWithForm({
   popup: addCardPopupElement,
   submitFormCallback: (evt) => {
     evt.preventDefault();
+    renderLoadingText(addSubmitBtn, 'Создать', 'Сохранение...', true);
     const newCardData = addCardPopup.getInputValues();
     api.addCard({
       name: newCardData.name,
-      link: newCardData.link
+      link: newCardData.link,
+      popupClose: () => {
+        addCardPopup.close();
+      }
     });
     addFormValidator.disableButton(
       addSubmitBtn,
       selectorsConfig.inactiveButtonClass);
-    addCardPopup.close();
   }
 });
 
@@ -152,10 +164,15 @@ const avatarPopup = new PopupWithForm({
   popup: avatarPopupElement,
   submitFormCallback: (evt) => {
     evt.preventDefault();
+    renderLoadingText(avatarSubmitBtn, 'Сохранить', 'Сохранение...', true);
     const avatarPopupInputValue = avatarPopup.getInputValues();
-    console.log(avatarPopupInputValue)
-    api.changeAvatar(avatarPopupInputValue, avatarImg);
-    avatarPopup.close();
+    api.changeAvatar({
+      avatarPopupInputValue,
+      avatarImg,
+      popupClose: () => {
+        avatarPopup.close();
+      }
+    });
   }
 })
 

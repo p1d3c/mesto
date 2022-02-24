@@ -1,3 +1,10 @@
+import { renderLoadingText,
+  editSubmitBtn,
+  addSubmitBtn,
+  delConfirmSubmitBtn,
+  avatarSubmitBtn
+} from '../utils/utils';
+
 export default class Api {
   constructor({ baseUrl, headers, renderCardsCallback, setUserInfoCallback, addNewCardCallback }) {
     this._baseUrl = baseUrl;
@@ -19,12 +26,11 @@ export default class Api {
     return Promise.reject(`Ошибка: ${res.status}`);
     })
     .then((res) => {
-      this._renderInitialCards(res);
+      this._renderCardsCallback(res);
     })
-  }
-
-  _renderInitialCards(items) {
-    this._renderCardsCallback(items);
+    .catch((err) => {
+      console.log(err);
+    })
   }
 
   getUserInfo(avatarImg) {
@@ -41,10 +47,13 @@ export default class Api {
     .then ((res) => {
       avatarImg.src = res.avatar;
       this._setUserInfoCallback(res);
-    });
+    })
+    .catch((err) => {
+      console.log(err);
+    })
   }
 
-  setUserinfo({ name, about }) {
+  setUserinfo({ name, about, popupClose }) {
     fetch(this._baseUrl + '/users/me', {
       method: 'PATCH',
       headers: this._headers,
@@ -60,9 +69,16 @@ export default class Api {
     .then((res) => {
       this._setUserInfoCallback(res);
     })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      popupClose();
+      renderLoadingText(editSubmitBtn, 'Сохранить', 'Сохранение...', false);
+    })
   }
 
-  addCard({ name, link }) {
+  addCard({ name, link, popupClose }) {
     fetch(this._baseUrl + '/cards', {
       method: 'POST',
       headers: this._headers,
@@ -81,9 +97,16 @@ export default class Api {
     .then((res) => {
       this._addNewCardCallback(res);
     })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      popupClose();
+      renderLoadingText(addSubmitBtn, 'Создать', 'Сохранение...', false);
+    })
   }
 
-  delCard(cardId) {
+  delCard({ cardId, popupClose }) {
     fetch(this._baseUrl + `/cards/${cardId}`, {
       method: 'DELETE',
       headers: this._headers
@@ -94,6 +117,13 @@ export default class Api {
       }
 
       return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      popupClose();
+      renderLoadingText(delConfirmSubmitBtn, 'Да', 'Удаление...', false);
     })
   }
 
@@ -111,6 +141,9 @@ export default class Api {
     })
     .then((res) => {
       changeLikeBtnView(res);
+    })
+    .catch((err) => {
+      console.log(err);
     })
   }
 
@@ -135,7 +168,7 @@ export default class Api {
     })
   }
 
-  changeAvatar(avatarPopupInputValue, avatarImg) {
+  changeAvatar({ avatarPopupInputValue, avatarImg, popupClose }) {
     fetch(this._baseUrl + `/users/me/avatar`, {
       method: 'PATCH',
       headers: this._headers,
@@ -155,6 +188,10 @@ export default class Api {
     })
     .catch((err) => {
       console.log(err);
+    })
+    .finally(() => {
+      popupClose();
+      renderLoadingText(avatarSubmitBtn, 'Сохранить', 'Сохранение...', false);
     })
   }
 }

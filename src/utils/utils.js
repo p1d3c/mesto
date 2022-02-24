@@ -26,9 +26,21 @@ export const addSubmitBtn = document.querySelector('button[name="add-submit"]');
 export const titleInput = document.querySelector('.popup__input_type_title');
 export const linkInput = document.querySelector('.popup__input_type_image');
 
+export const delConfirmSubmitBtn = document.querySelector('button[name="del-confirm-submit"]');
+
 export const avatarFormElementSelector = '.popup__form_type_avatar';
 export const avatarImg = document.querySelector('.profile__avatar');
+export const avatarSubmitBtn = document.querySelector('button[name="avatar-submit"]');
 
 export const cardListSelector = '.elements';
 
 export const templateSelector = '#temp';
+
+export
+function renderLoadingText(button, btnTextBefore, btnTextAfter, isLoading) {
+  if (isLoading) {
+    button.textContent = btnTextAfter;
+  } else {
+    button.textContent = btnTextBefore;
+  }
+};
