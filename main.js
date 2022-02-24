@@ -1078,7 +1078,6 @@ api.getUserInfo().then(function (res) {
   return api.getResponseData(res);
 }).then(function (res) {
   ownerId = res._id;
-  console.log(ownerId);
   userInformation.setUserInfo({
     name: res.name,
     job: res.about,
