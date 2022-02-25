@@ -36,8 +36,8 @@ var Api = /*#__PURE__*/function () {
   }
 
   _createClass(Api, [{
-    key: "getResponseData",
-    value: function getResponseData(res) {
+    key: "_getResponseData",
+    value: function _getResponseData(res) {
       if (!res.ok) {
         return Promise.reject("\u041E\u0448\u0438\u0431\u043A\u0430: ".concat(res.status));
       }
@@ -47,20 +47,30 @@ var Api = /*#__PURE__*/function () {
   }, {
     key: "getInitialCards",
     value: function getInitialCards() {
+      var _this = this;
+
       return fetch(this._baseUrl + '/cards', {
         headers: this._headers
+      }).then(function (res) {
+        return _this._getResponseData(res);
       });
     }
   }, {
     key: "getUserInfo",
     value: function getUserInfo() {
+      var _this2 = this;
+
       return fetch(this._baseUrl + '/users/me', {
         headers: this._headers
+      }).then(function (res) {
+        return _this2._getResponseData(res);
       });
     }
   }, {
     key: "setUserInfo",
     value: function setUserInfo(_ref2) {
+      var _this3 = this;
+
       var name = _ref2.name,
           about = _ref2.about;
       return fetch(this._baseUrl + '/users/me', {
@@ -70,11 +80,15 @@ var Api = /*#__PURE__*/function () {
           name: name,
           about: about
         })
+      }).then(function (res) {
+        return _this3._getResponseData(res);
       });
     }
   }, {
     key: "addCard",
     value: function addCard(_ref3) {
+      var _this4 = this;
+
       var name = _ref3.name,
           link = _ref3.link;
       return fetch(this._baseUrl + '/cards', {
@@ -84,38 +98,54 @@ var Api = /*#__PURE__*/function () {
           name: name,
           link: link
         })
+      }).then(function (res) {
+        return _this4._getResponseData(res);
       });
     }
   }, {
     key: "delCard",
     value: function delCard(_ref4) {
+      var _this5 = this;
+
       var cardId = _ref4.cardId;
       return fetch(this._baseUrl + "/cards/".concat(cardId), {
         method: 'DELETE',
         headers: this._headers
+      }).then(function (res) {
+        return _this5._getResponseData(res);
       });
     }
   }, {
     key: "likeCard",
     value: function likeCard(_ref5) {
+      var _this6 = this;
+
       var cardId = _ref5.cardId;
       return fetch(this._baseUrl + "/cards/".concat(cardId, "/likes"), {
         method: 'PUT',
         headers: this._headers
+      }).then(function (res) {
+        return _this6._getResponseData(res);
       });
     }
   }, {
     key: "dislikeCard",
     value: function dislikeCard(_ref6) {
+      var _this7 = this;
+
       var cardId = _ref6.cardId;
       return fetch(this._baseUrl + "/cards/".concat(cardId, "/likes"), {
         method: 'DELETE',
         headers: this._headers
+      }).then(function (res) {
+        return _this7._getResponseData(res);
       });
     }
   }, {
     key: "changeAvatar",
     value: function changeAvatar(_ref7) {
+      var _this8 = this;
+
       var avatarPopupInputValue = _ref7.avatarPopupInputValue;
       return fetch(this._baseUrl + "/users/me/avatar", {
         method: 'PATCH',
@@ -123,6 +153,8 @@ var Api = /*#__PURE__*/function () {
         body: JSON.stringify({
           avatar: avatarPopupInputValue.avatar
         })
+      }).then(function (res) {
+        return _this8._getResponseData(res);
       });
     }
   }]);
@@ -144,7 +176,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Card)
 /* harmony export */ });
-/* harmony import */ var _pages_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../pages/index.js */ "./src/pages/index.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -153,13 +184,12 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-
-
 var Card = /*#__PURE__*/function () {
   function Card(_ref) {
     var _this = this;
 
     var data = _ref.data,
+        ownerId = _ref.ownerId,
         handleImgClick = _ref.handleImgClick,
         handleDelClick = _ref.handleDelClick,
         handleLike = _ref.handleLike,
@@ -180,6 +210,7 @@ var Card = /*#__PURE__*/function () {
     this._delCallback = handleDelClick;
     this._likeCallback = handleLike;
     this._dislikeCallback = handleDislike;
+    this._ownerId = ownerId;
     this._name = data.name;
     this._link = data.link;
     this._alt = data.name;
@@ -244,12 +275,12 @@ var Card = /*#__PURE__*/function () {
     value: function _isOwner() {
       var _this3 = this;
 
-      if (this._data.owner._id != _pages_index_js__WEBPACK_IMPORTED_MODULE_0__.ownerId) {
+      if (this._data.owner._id != this._ownerId) {
         this._delBtn.style.display = 'none';
       }
 
       this._data.likes.forEach(function (userLike) {
-        if (userLike._id === _pages_index_js__WEBPACK_IMPORTED_MODULE_0__.ownerId) {
+        if (userLike._id === _this3._ownerId) {
           _this3._likeBtn.classList.toggle('element__heart_active');
         }
       });
@@ -878,9 +909,6 @@ var selectorsConfig = {
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "ownerId": () => (/* binding */ ownerId)
-/* harmony export */ });
 /* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index.css */ "./src/pages/index.css");
 /* harmony import */ var _components_Card_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/Card.js */ "./src/components/Card.js");
 /* harmony import */ var _components_selectorsConfig_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/selectorsConfig.js */ "./src/components/selectorsConfig.js");
@@ -923,6 +951,7 @@ var openedImg = new _components_PopupWithImage_js__WEBPACK_IMPORTED_MODULE_8__["
 function createNewCard(item) {
   var card = new _components_Card_js__WEBPACK_IMPORTED_MODULE_1__["default"]({
     data: item,
+    ownerId: ownerId,
     handleImgClick: function handleImgClick() {
       openedImg.open(item);
     },
@@ -932,8 +961,6 @@ function createNewCard(item) {
         (0,_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.renderLoadingText)(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.delConfirmSubmitBtn, 'Да', 'Удаление...', true);
         api.delCard({
           cardId: item._id
-        }).then(function (res) {
-          return api.getResponseData(res);
         }).then(function () {
           card.delCard();
           delCardPopup.close();
@@ -949,8 +976,6 @@ function createNewCard(item) {
       api.likeCard({
         cardId: item._id
       }).then(function (res) {
-        return api.getResponseData(res);
-      }).then(function (res) {
         card.changeBtnView(res);
       }).catch(function (err) {
         console.log(err);
@@ -959,8 +984,6 @@ function createNewCard(item) {
     handleDislike: function handleDislike() {
       api.dislikeCard({
         cardId: item._id
-      }).then(function (res) {
-        return api.getResponseData(res);
       }).then(function (res) {
         card.changeBtnView(res);
       }).catch(function (err) {
@@ -994,14 +1017,12 @@ var profilePopup = new _components_PopupWithForm_js__WEBPACK_IMPORTED_MODULE_7__
       name: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.nameInput.value,
       about: _utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.jobInput.value
     }).then(function (res) {
-      return api.getResponseData(res);
-    }).then(function (res) {
-      console.log(res);
       userInformation.setUserInfo({
         name: res.name,
         job: res.about,
         avatarLink: res.avatar
       });
+      addCardPopup.close();
     }).catch(function (err) {
       console.log(err);
     }).finally(function () {
@@ -1020,16 +1041,14 @@ var addCardPopup = new _components_PopupWithForm_js__WEBPACK_IMPORTED_MODULE_7__
       name: newCardData.name,
       link: newCardData.link
     }).then(function (res) {
-      return api.getResponseData(res);
-    }).then(function (res) {
       var newCard = createNewCard(res);
       cardsContainer.addItem(newCard, 'start');
+      addCardPopup.close();
     }).catch(function (err) {
       console.log(err);
     }).finally(function () {
       (0,_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.renderLoadingText)(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.addSubmitBtn, 'Создать', 'Сохранение...', false);
     });
-    addCardPopup.close();
     addFormValidator.disableButton(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.addSubmitBtn, _components_selectorsConfig_js__WEBPACK_IMPORTED_MODULE_2__.selectorsConfig.inactiveButtonClass);
   }
 });
@@ -1045,9 +1064,6 @@ var avatarPopup = new _components_PopupWithForm_js__WEBPACK_IMPORTED_MODULE_7__[
     api.changeAvatar({
       avatarPopupInputValue: avatarPopupInputValue
     }).then(function (res) {
-      return api.getResponseData(res);
-    }).then(function (res) {
-      console.log(res);
       userInformation.setUserAvatar(res.avatar);
       avatarPopup.close();
     }).catch(function (err) {
@@ -1067,22 +1083,16 @@ profilePopup.setEventListeners();
 addCardPopup.setEventListeners();
 delCardPopup.setEventListeners();
 avatarPopup.setEventListeners();
-api.getInitialCards().then(function (res) {
-  return api.getResponseData(res);
-}).then(function (res) {
-  cardsContainer.renderItems(res);
-}).catch(function (err) {
-  console.log(err);
-});
-api.getUserInfo().then(function (res) {
-  return api.getResponseData(res);
-}).then(function (res) {
-  ownerId = res._id;
+var getUserInfoPromise = api.getUserInfo();
+var getInitialCardsPromise = api.getInitialCards();
+Promise.all([getUserInfoPromise, getInitialCardsPromise]).then(function (res) {
+  ownerId = res[0]._id;
   userInformation.setUserInfo({
-    name: res.name,
-    job: res.about,
-    avatarLink: res.avatar
+    name: res[0].name,
+    job: res[0].about,
+    avatarLink: res[0].avatar
   });
+  cardsContainer.renderItems(res[1]);
 }).catch(function (err) {
   console.log(err);
 });
