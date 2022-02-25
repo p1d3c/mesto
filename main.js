@@ -1022,13 +1022,12 @@ var profilePopup = new _components_PopupWithForm_js__WEBPACK_IMPORTED_MODULE_7__
         job: res.about,
         avatarLink: res.avatar
       });
-      addCardPopup.close();
+      profilePopup.close();
     }).catch(function (err) {
       console.log(err);
     }).finally(function () {
       (0,_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.renderLoadingText)(_utils_utils_js__WEBPACK_IMPORTED_MODULE_4__.editSubmitBtn, 'Сохранить', 'Сохранение...', false);
     });
-    profilePopup.close();
   }
 });
 var addCardPopup = new _components_PopupWithForm_js__WEBPACK_IMPORTED_MODULE_7__["default"]({
