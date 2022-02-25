@@ -140,7 +140,7 @@ const profilePopup = new PopupWithForm({
           job: res.about,
           avatarLink: res.avatar
         })
-        addCardPopup.close();
+        profilePopup.close();
       })
       .catch((err) => {
         console.log(err);
@@ -148,7 +148,6 @@ const profilePopup = new PopupWithForm({
       .finally(() => {
         renderLoadingText(editSubmitBtn, 'Сохранить', 'Сохранение...', false);
     })
-    profilePopup.close();
   }
 });
 
