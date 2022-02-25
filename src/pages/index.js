@@ -34,7 +34,7 @@ import PopupWithImage from '../components/PopupWithImage.js';
 import PopupWithConfirmation from '../components/PopupWithConfirmation.js';
 import Api from '../components/Api';
 
-export let ownerId = null;
+let ownerId = null;
 
 const api = new Api({
   baseUrl: 'https://mesto.nomoreparties.co/v1/cohort36',
@@ -57,6 +57,7 @@ const openedImg = new PopupWithImage({
 function createNewCard(item) {
   const card = new Card({
     data: item,
+    ownerId,
     handleImgClick: () => {
       openedImg.open(item);
     },
@@ -67,9 +68,6 @@ function createNewCard(item) {
         api.delCard({
           cardId: item._id
         })
-          .then((res) => {
-            return api.getResponseData(res);
-          })
           .then(() => {
             card.delCard();
             delCardPopup.close();
@@ -88,9 +86,6 @@ function createNewCard(item) {
         cardId: item._id
       })
         .then((res) => {
-          return api.getResponseData(res);
-        })
-        .then((res) => {
           card.changeBtnView(res);
         })
         .catch((err) => {
@@ -101,9 +96,6 @@ function createNewCard(item) {
       api.dislikeCard({
         cardId: item._id
       })
-        .then((res) => {
-          return api.getResponseData(res);
-        })
         .then((res) => {
           card.changeBtnView(res);
         })
@@ -143,15 +135,12 @@ const profilePopup = new PopupWithForm({
       about: jobInput.value
     })
       .then((res) => {
-        return api.getResponseData(res);
-      })
-      .then((res) => {
-        console.log(res);
         userInformation.setUserInfo({
           name: res.name,
           job: res.about,
           avatarLink: res.avatar
         })
+        addCardPopup.close();
       })
       .catch((err) => {
         console.log(err);
@@ -174,11 +163,9 @@ const addCardPopup = new PopupWithForm({
       link: newCardData.link,
     })
       .then((res) => {
-        return api.getResponseData(res);
-      })
-      .then((res) => {
         const newCard = createNewCard(res);
         cardsContainer.addItem(newCard, 'start');
+        addCardPopup.close();
       })
       .catch((err) => {
         console.log(err);
@@ -186,7 +173,6 @@ const addCardPopup = new PopupWithForm({
       .finally(() => {
         renderLoadingText(addSubmitBtn, 'Создать', 'Сохранение...', false);
     })
-    addCardPopup.close();
     addFormValidator.disableButton(
       addSubmitBtn,
       selectorsConfig.inactiveButtonClass);
@@ -205,10 +191,6 @@ const avatarPopup = new PopupWithForm({
     const avatarPopupInputValue = avatarPopup.getInputValues();
     api.changeAvatar({ avatarPopupInputValue })
       .then((res) => {
-        return api.getResponseData(res);
-      })
-      .then((res) => {
-        console.log(res)
         userInformation.setUserAvatar(res.avatar);
         avatarPopup.close();
       })
@@ -244,28 +226,19 @@ addCardPopup.setEventListeners();
 delCardPopup.setEventListeners();
 avatarPopup.setEventListeners();
 
-api.getInitialCards()
-  .then((res) => {
-    return api.getResponseData(res);
-  })
-  .then((res) => {
-    cardsContainer.renderItems(res);
-  })
-  .catch((err) => {
-    console.log(err);
-})
+const getUserInfoPromise = api.getUserInfo();
+const getInitialCardsPromise = api.getInitialCards();
 
-api.getUserInfo()
+Promise.all([getUserInfoPromise, getInitialCardsPromise])
   .then((res) => {
-    return api.getResponseData(res);
-  })
-  .then ((res) => {
-    ownerId = res._id;
+    ownerId = res[0]._id;
     userInformation.setUserInfo({
-      name: res.name,
-      job: res.about,
-      avatarLink: res.avatar
+      name: res[0].name,
+      job: res[0].about,
+      avatarLink: res[0].avatar
     })
+
+    cardsContainer.renderItems(res[1]);
   })
   .catch((err) => {
     console.log(err);

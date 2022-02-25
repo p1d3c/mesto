@@ -7,7 +7,7 @@ export default class Api {
     this._addNewCardCallback = addNewCardCallback;
   }
 
-  getResponseData(res) {
+  _getResponseData(res) {
     if (!res.ok) {
       return Promise.reject(`Ошибка: ${res.status}`);
     }
@@ -18,11 +18,17 @@ export default class Api {
     return fetch(this._baseUrl + '/cards', {
       headers: this._headers
     })
+    .then((res) => {
+      return this._getResponseData(res);
+    })
   }
 
   getUserInfo() {
     return fetch(this._baseUrl + '/users/me', {
       headers: this._headers
+    })
+    .then((res) => {
+      return this._getResponseData(res);
     })
   }
 
@@ -31,6 +37,9 @@ export default class Api {
       method: 'PATCH',
       headers: this._headers,
       body: JSON.stringify({ name, about })
+    })
+    .then((res) => {
+      return this._getResponseData(res);
     })
   }
 
@@ -43,12 +52,18 @@ export default class Api {
         link: link
       })
     })
+    .then((res) => {
+      return this._getResponseData(res);
+    })
   }
 
   delCard({ cardId }) {
     return fetch(this._baseUrl + `/cards/${cardId}`, {
       method: 'DELETE',
       headers: this._headers
+    })
+    .then((res) => {
+      return this._getResponseData(res);
     })
   }
 
@@ -57,12 +72,18 @@ export default class Api {
       method: 'PUT',
       headers: this._headers
     })
+    .then((res) => {
+      return this._getResponseData(res);
+    })
   }
 
   dislikeCard({ cardId }) {
     return fetch(this._baseUrl + `/cards/${cardId}/likes`, {
       method: 'DELETE',
       headers: this._headers
+    })
+    .then((res) => {
+      return this._getResponseData(res);
     })
   }
 
@@ -73,6 +94,9 @@ export default class Api {
       body: JSON.stringify({
         avatar: avatarPopupInputValue.avatar
       })
+    })
+    .then((res) => {
+      return this._getResponseData(res);
     })
   }
 }

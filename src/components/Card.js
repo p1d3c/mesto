@@ -1,11 +1,10 @@
-import { ownerId } from '../pages/index.js'
-
 export default class Card {
-  constructor({ data, handleImgClick, handleDelClick, handleLike, handleDislike, templateSelector }) {
+  constructor({ data, ownerId, handleImgClick, handleDelClick, handleLike, handleDislike, templateSelector }) {
     this._imgCallback = handleImgClick;
     this._delCallback = handleDelClick;
     this._likeCallback = handleLike;
     this._dislikeCallback = handleDislike;
+    this._ownerId = ownerId;
     this._name = data.name;
     this._link = data.link;
     this._alt = data.name;
@@ -66,12 +65,12 @@ export default class Card {
   }
 
   _isOwner() {
-    if (this._data.owner._id != ownerId) {
+    if (this._data.owner._id != this._ownerId) {
       this._delBtn.style.display = 'none';
     }
 
     this._data.likes.forEach((userLike) => {
-      if (userLike._id === ownerId) {
+      if (userLike._id === this._ownerId) {
         this._likeBtn.classList.toggle('element__heart_active');
       }
     })
